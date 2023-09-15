@@ -1,0 +1,74 @@
+.sidebar{
+    flex: 1;
+}
+.side-container{
+    margin-top: 20px;
+    margin-left: 32px;
+}
+.sides{
+    margin-top: 10px;
+}
+.side1{
+    margin-top: 20px;
+}
+.side2{
+margin-top: 20px;
+}
+.side3{
+    margin-top: 20px;
+}
+.side4{
+    margin-top: 20px;
+}
+.side5{
+    margin-top: 20px;
+}
+.side6{
+    margin-top: 20px;
+}
+.side7{
+    margin-top: 20px;
+}
+.side8{
+    margin-top: 20px;
+}
+.side9{
+    margin-top: 20px;
+}
+.side10{
+    margin-top: 20px;
+}
+.side11{
+    margin-top: 20px;
+}
+Link:hover{
+    padding: 17px;
+    width: 90%;
+    height: 50%;
+    color: #010080;
+    background-color: #eee1ff;
+    outline: 0.5px solid #eee1ff;
+    -webkit-box-shadow: 2px 2px 9px -2px #eee1ff;
+            box-shadow: 2px 2px 9px -2px #eee1ff;
+}
+.side3-select{
+    padding: 17px;
+    width: 90%;
+    height: 30%;
+    color: #010080;
+    background-color: #eee1ff;
+}
+.side1-select{
+    padding: 17px;
+    width: 90%;
+    height: 50%;
+    color: #010080;
+    background-color: #eee1ff;
+}
+.sides-select{
+    padding: 17px;
+    width: 90%;
+    height: 50%;
+    color: #010080;
+    background-color: #eee1ff;
+}

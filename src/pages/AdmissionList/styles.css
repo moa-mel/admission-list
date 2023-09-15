@@ -1,0 +1,64 @@
+.admit-container{
+    display: flex;
+    }
+    .admit-contain{
+    flex: 3;
+    }
+    .admit-content{
+        margin-top: -3px;
+        padding: 17px;
+        width: 100%;
+        height: 90vh;
+        background-color: #D9D9D9;
+    }  
+.admit-h2{
+    margin-top: 30px;
+    font-size: 1.9rem;
+    margin-left: 300px;
+}
+.adm{
+    margin-top: 50px;
+    display: flex;
+    column-gap: 50px;
+    margin-left: 180px;
+}
+.admit-p{
+    margin-top: 7px;
+    font-size: 1.0rem;
+    color: #010080;
+}
+.admit2{
+    margin-top: 50px;
+    display: flex;
+    column-gap: 50px;
+    margin-left: 180px;
+}
+.admit2-p{
+    margin-top: 7px;
+    font-size: 1.0rem;
+    color: #010080;
+}
+.admit3{
+    margin-top: 50px;
+    display: flex;
+    column-gap: 20px;
+    margin-left: 180px;
+}
+.admit3-p{
+    margin-top: 7px;
+    font-size: 1.0rem;
+    color: #010080;
+}
+.admit-but{
+    margin-left: 300px;
+    margin-top: 50px;
+  padding: 7px 24px;
+  border: 1px solid #010080;
+  background-color: #010080;
+  color: #fff;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  width: 20%;
+}

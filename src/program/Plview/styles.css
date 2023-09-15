@@ -1,0 +1,50 @@
+.plv-container{
+    display: flex;
+}
+.plv-content{
+    flex: 3;
+}
+.plv-contain{
+    margin-top: -3px;
+    padding: 17px;
+    width: 100%;
+    height: 90vh;
+    background-color: #D9D9D9;
+}
+.suj-r{
+    margin-top: 13px;
+    padding: 17px;
+    width: 20%;
+    height: 10px;
+    border-radius: 14px;
+    border: 1px solid #000;
+    background-color: #fff;
+    color: #000000;
+}
+.suj-r p{
+    margin-top: -10px;
+}
+.suj-div{
+    display: flex;
+    column-gap: 20px;
+}
+.suj2-div{
+    display: flex;
+    column-gap: 20px;
+}
+.adpg{
+    font-size: 1.0rem;
+}
+.prgm-one{
+    margin-top: 13px;
+    padding: 17px;
+    width: 34%;
+    height: 35px;
+    border-radius: 10px;
+    border: 1px solid #858585;
+}
+.program-add{
+    margin-top: -15px;
+    display: flex;
+    column-gap: 10px;
+}

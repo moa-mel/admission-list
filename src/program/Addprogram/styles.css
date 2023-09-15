@@ -1,0 +1,67 @@
+.adp-container{
+    display: flex;
+}
+.adp-content{
+    flex: 3;
+}
+.adp-contain{
+    margin-top: -3px;
+    padding: 17px;
+    width: 100%;
+    height: 90vh;
+    background-color: #D9D9D9;
+}
+.adprg-up{
+    display: flex;
+    column-gap: 40px;
+}
+.adprg-input{
+    margin-top: 10px;
+    padding: 7px 24px;
+    height: 2.5rem;
+    border: 1px solid #fff;
+    background-color: #fff;
+    color: #000;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+}
+.adprg-pp{
+    margin-top: 30px;
+}
+.adprg-1{
+    margin-top: 20px;
+ display: flex;
+ column-gap: 22px;
+}
+.adprg-2{
+    margin-top: 8px;
+    display: flex;
+    column-gap: 22px;
+}
+.adprg-3{
+    margin-top: 8px;
+    display: flex;
+    column-gap: 22px;
+}
+.adprg-4{
+    margin-top: 8px;
+    display: flex;
+    column-gap: 22px;
+}
+.adprg-but{
+    margin-left: 320px;
+    margin-top: 27px;
+  padding: 7px 24px;
+  height: 3.2rem;
+  border: 1px solid #010080;
+  background-color: #010080;
+  color: #fff;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  width: 20%;
+}

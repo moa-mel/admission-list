@@ -1,0 +1,42 @@
+.subject-container{
+    display: flex;
+}
+.subject-content{
+    flex:3;
+}
+.subject-contain{
+    margin-top: -3px;
+    padding: 17px;
+    width: 100%;
+    height: 90vh;
+    background-color: #D9D9D9;
+}
+.subject-h2{
+    margin-top: 30px;
+    font-size: 1.9rem;
+    margin-left: 400px;
+}
+.subj{
+    margin-top: 30px;
+    display: flex;
+    column-gap: 20px;
+    margin-left: 170px;
+}
+.subj-p{
+    margin-top: 7px;
+    font-size: 1.0rem;
+    color: #010080;
+}
+.subj-but{
+    margin-left: 400px;
+    margin-top: 30px;
+  padding: 7px 24px;
+  border: 1px solid #010080;
+  background-color: #010080;
+  color: #fff;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  width: 20%;
+}

@@ -1,0 +1,13 @@
+.scv-container{
+    display: flex;
+}
+.scv-content{
+    flex: 3;
+}
+.scv-contain{
+    margin-top: -3px;
+    padding: 17px;
+    width: 100%;
+    height: 90vh;
+    background-color: #D9D9D9;
+}

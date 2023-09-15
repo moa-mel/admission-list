@@ -1,0 +1,75 @@
+.upp-container{
+    display: flex;
+    }
+    .upp-contain{
+    flex: 3;
+    }
+    .upp-content{
+        margin-top: -3px;
+        padding: 17px;
+        width: 100%;
+        height: 90vh;
+        background-color: #D9D9D9;
+    }
+    .upp-h2{
+        margin-top: 30px;
+        font-size: 1.9rem;
+        margin-left: 300px;
+    }
+    .upp{
+        display: flex;
+        column-gap: 50px;
+        margin-left: 180px;
+    }
+    .upp-p{
+        margin-top: 37px;
+        font-size: 1.0rem;
+        color: #010080;
+    }
+    .upp2{
+        display: flex;
+        column-gap: 70px;
+        margin-left: 180px;
+    }
+    .upp2-p{
+        margin-top: 37px;
+        font-size: 1.0rem;
+        color: #010080;
+    }
+    .upp3{
+        display: flex;
+        column-gap: 45px;
+        margin-left: 140px;
+    }
+    .upp3-p{
+        margin-top: 37px;
+        font-size: 1.0rem;
+        color: #010080;
+    }
+    .upp-but{
+        margin-left: 320px;
+        margin-top: 50px;
+      padding: 7px 24px;
+      height: 3.2rem;
+      border: 1px solid #010080;
+      background-color: #010080;
+      color: #fff;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      cursor: pointer;
+      width: 20%;
+    }
+    .upp-input{
+        margin-top: 38px;
+      padding: 7px 24px;
+      height: 3rem;
+      border: 1px solid #fff;
+      background-color: #fff;
+      color: #000;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      cursor: pointer;
+      width: 40%;
+    }
