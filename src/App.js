@@ -30,6 +30,16 @@ import Addprogram from "./program/Addprogram";
 import Updateprogram from "./program/Updateprogram";
 import Scview from "./Subject/Scview";
 import DownloadAd from "./AdmissionCrit/DownloadAd";
+import Merit from "./AdmissionCrit/Merit";
+import Catchment from "./AdmissionCrit/Catchment"
+import Elds from "./AdmissionCrit/Elds"
+import Addmerit from "./AdmissionCrit/Addmerit";
+import Addcatch from "./AdmissionCrit/Addcatch";
+import Addelds from "./AdmissionCrit/Addelds";
+import Updatecatch from "./AdmissionCrit/Updatecatch"
+import Updatemerit from "./AdmissionCrit/Updatemerit"
+import Updateelds from "./AdmissionCrit/Updateelds"
+
 
 function App() {
   return (
@@ -61,6 +71,15 @@ function App() {
       <Route path="/updateprogram" element={<Updateprogram/>} />
       <Route path="/scview" element={<Scview/>} />
       <Route path="/downloadAdm" element={<DownloadAd/>} />
+      <Route path="/admissioncriteria/merit" element={<Merit/>} />
+      <Route path="/addmerit" element={<Addmerit/>} />
+      <Route path="/catchment" element={<Catchment/>} />
+      <Route path="/elds" element={<Elds/>} />
+      <Route path="/addcatch" element={<Addcatch/>} />
+      <Route path="/addelds" element={<Addelds/>} />
+      <Route path="/updatecatch" element={<Updatecatch/>} />
+      <Route path="/updatemerit" element={<Updatemerit/>} />
+      <Route path="/updateelds" element={<Updateelds/>} />
       </Routes>
       </Router>
     </div>

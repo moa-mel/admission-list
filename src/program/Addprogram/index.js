@@ -2,7 +2,6 @@ import React from 'react'
 import "./styles.css"
 import Navbar from '../../components/Navbar'
 import Sidebar from '../../components/Sidebar'
-import { Link } from 'react-router-dom';
 import { Select } from '@chakra-ui/react'
 
 const Addprogram = () => {

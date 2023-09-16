@@ -1,0 +1,62 @@
+.adctch-container{
+    display: flex;
+}
+.adctch-content{
+    flex: 3;
+}
+.adctch-contain{
+    margin-top: -3px;
+    padding: 17px;
+    width: 100%;
+    height: 90vh;
+    background-color: #D9D9D9;
+}
+.adctch-h1{
+    margin-left: 15px;
+    color: #000;
+    font-size: 1.3rem;
+}
+.adctch-a{
+    color: #000;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+.adctch-p{
+    margin-left: 15px;
+    margin-top: 30px;
+    color: #000;
+    font-size: 1.1rem;
+}
+.adctch-one{
+    margin-top: 20px;
+    margin-left: 15px;
+    display: flex;
+    column-gap: 20px;
+}
+.adctch-pp{
+    margin-left: 15px;
+margin-top: 20px;
+}
+.adctch-three{
+    margin-left: 15px;
+    margin-top: 20px;
+    display: flex;
+    column-gap: 60px;
+}
+.adctch-two{
+    margin-top: 30px;
+    margin-left: 15px;
+}
+.adctch-butt{
+    margin-left: 330px;
+    margin-top: 50px;
+  padding: 7px 24px;
+  border: 1px solid #010080;
+  background-color: #010080;
+  color: #fff;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  width: 20%;
+}

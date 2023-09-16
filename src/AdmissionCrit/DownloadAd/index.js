@@ -40,7 +40,9 @@ const DownloadAd = () => {
                                 <option value='option3'></option>
                             </Select>
                         </div>
+                        <Link to='/admissioncriteria/merit'>
                         <button className='dadm2-but'>Download</button>
+                        </Link>
         </div>
         </div>
         </div>
