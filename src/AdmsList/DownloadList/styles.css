@@ -1,0 +1,66 @@
+.dalst-container{
+    display: flex;
+}
+.dalst-content{
+    flex: 3;
+}
+.dalst-contain{
+    margin-top: -3px;
+    padding: 17px;
+    width: 100%;
+    height: 90vh;
+    background-color: #D9D9D9;
+}
+.dalst-h2{
+    margin-top: 30px;
+    font-size: 1.9rem;
+    margin-left: 300px;
+}
+.dalst{
+    margin-left: 180px;
+}
+.dalst-one{
+    margin-top: 10px;
+display: flex;
+column-gap: 40px;
+}
+label{
+ color: #010080;
+}
+.dalst-input{
+    margin-top: 25px;
+    padding: 7px 24px;
+    height: 3.5rem;
+    border: 1px solid #fff;
+    background-color: #fff;
+    color: #000;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    width: 60%;
+}
+.dalst-two{
+    margin-top: 10px;
+    display: flex;
+    column-gap: 40px;
+}
+.dalst-three{
+    margin-top: 10px;
+    display: flex;
+    column-gap: 30px;
+}
+.dalst-but{
+    margin-left: 200px;
+    margin-top: 50px;
+  padding: 7px 24px;
+  border: 1px solid #010080;
+  background-color: #010080;
+  color: #fff;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  width: 20%;
+}
+

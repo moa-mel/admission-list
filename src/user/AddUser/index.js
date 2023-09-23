@@ -1,12 +1,63 @@
-import React from 'react'
+import React, {useState} from 'react'
 import "./styles.css"
 import Navbar from '../../components/Navbar'
 import Sidebar from '../../components/Sidebar'
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Select } from '@chakra-ui/react'
 import GB from "../../images/Go back.png"
+import { useDispatch } from 'react-redux';
+import { registerUser } from '../../redux/UserSlice';
+import { useToast } from "@chakra-ui/react";
 
 const AddUser = () => {
+  const navigate = useNavigate()
+  const  toast = useToast();
+  const [title, setTitle] = useState('')
+  const [email, setEmail] = useState('')
+  const [first_name, setFirst_name] = useState('')
+  const [last_name, setLast_name] = useState('')
+  const [middle_name, setMiddle_name] = useState('')
+  const [phone_1, setPhone_1] = useState('')
+  const [phone_2, setPhone_2] = useState('')
+  const [account_type, setAccount_type] = useState('')
+
+  const dispatch = useDispatch();
+  const handleAddUsers=(e)=>{
+    e.preventDefault();
+    let userCredentials={
+      title, email, first_name, last_name, middle_name, phone_1, phone_2, account_type
+    }
+    dispatch(registerUser(userCredentials)).then((result)=>{
+      toast({
+        title: 'Success',
+        description:'User registered and added successfully' ,
+        position:"top-right",
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+      });
+    if(result.payload){
+      setTitle('')
+      setEmail(' ');
+      setFirst_name(' ')
+      setLast_name(' ')
+      setMiddle_name(' ')
+      setPhone_1(' ')
+      setPhone_2(' ')
+      setAccount_type(' ')
+      navigate('/usermanagement')
+    }
+    })
+    .catch((err) =>  toast({
+      title: 'Error',
+      description:err.response.data.message ,
+      position:"top-right",
+      status: 'error',
+      duration: 9000,
+      isClosable: true,
+    }));
+  }
+
   return (
     <div className='ads'>
       <Navbar />
@@ -15,47 +66,87 @@ const AddUser = () => {
         <div className='ads-content'>
           <div className='ads-contain'>
             <h2 className='ads-h2'>Add User</h2>
-            <h3 className='ads-h3'>Title</h3>
-            <Select placeholder='Select option' size='md'
-              bg='white'
-              borderColor='white'
-              color='black'
-              width="100px"
-              required
-            >
-              <option value='option1'></option>
-              <option value='option2'></option>
-              <option value='option3'></option>
-            </Select>
-            <div className='ads-up'>
-              <div className='ads-1'>
-                <label>Surname:</label>
-                <input type='text'
-                  required
-                  className='ads-input' />
-              </div>
-              <div className='ads-2'>
-                <label>Other Names:</label>
-                <input type='text'
-                  className='ads-input'
-                  required />
-              </div>
-            </div>
-            <div className='ads-down'>
-              <div className='ads-3'>
-                <label>E-mail:</label>
-                <input type='text'
-                  required
-                  className='ads-input' />
-              </div>
-              <div className='ads-4'>
-                <label>Faculty:</label>
-                <input type='text'
-                  className='ads-input'
-                  required />
-              </div>
-            </div>
-            <button className='ads-but'>Add</button>
+            <label>Title</label>
+          <Select placeholder='Select title' size='md'
+            name="title"
+            value={title}
+            onChange={(e)=>setTitle(e.target.value)}
+            marginLeft='25px'
+            bg='white'
+            borderColor='#000'
+            color='black'
+            width="335px"
+          >
+            <option value='option1'>Prof</option>
+            <option value='option2'>Dr</option>
+            <option value='option3'>Mr</option>
+            <option value='option3'>Mrs</option>
+            <option value='option3'>Miss</option>
+
+          </Select>
+          <label>First Name</label>
+          <input
+            className="reg-input-text"
+            name="first_name"
+            type="text"
+            value={first_name}
+            onChange={(e)=>setFirst_name(e.target.value)}
+          />
+          <label>Last Name</label>
+          <input
+            className="reg-input-text"
+            name="last_name"
+            type="text"
+            value={last_name}
+            onChange={(e)=>setLast_name(e.target.value)}
+          />
+          <label>Middle Name</label>
+          <input
+            className="reg-input-text"
+            name="middle_name"
+            type="text"
+            value={middle_name}
+            onChange={(e)=>setMiddle_name(e.target.value)}
+          />
+          <label>Staff ID</label>
+          <input
+            className="reg-input-text"
+            name="email"
+            type="email"
+            value={email}
+            onChange={(e)=>setEmail(e.target.value)}
+          />
+          <label>Phone Number1</label>
+          <input
+            className="reg-input-text"
+            name="phone_1"
+            type="number"
+            value={phone_1}
+            onChange={(e)=>setPhone_1(e.target.value)}
+          />
+          <label>Phone Number2</label>
+          <input
+            className="reg-input-text"
+            name="phone_2"
+            type="number"
+            value={phone_2}
+            onChange={(e)=>setPhone_2(e.target.value)}
+          />
+          <label>Account Type</label>
+          <Select placeholder='Select type' size='md'
+            name="account_type"
+            value={account_type}
+            onChange={(e)=>setAccount_type(e.target.value)}
+            marginLeft='25px'
+            bg='white'
+            borderColor='#000'
+            color='black'
+            width="335px">
+            <option value='option1'>Admin</option>
+            <option value='option2'>Dean</option>
+          </Select>
+            <button className='ads-but'
+            onClick={handleAddUsers}>Add</button>
             <img src={GB} alt='' className='ads-img'/>
           </div>
         </div>

@@ -93,9 +93,22 @@ const Sidebar = () => {
                     <p onClick={(e)=>setActive("help")}>Help</p>
                     </Link>
                 </div>
-                <div className={active==="signout"?'side3-select':"side11"}>
-                <Link to="/signout">
-                    <p onClick={(e)=>setActive("signout")}>Sign Out</p>
+                <div className={active==="faculty"?'side3-select':"side11"}>
+                <Link to='/faculty'>
+                <Menu >
+                        <MenuButton    >
+                            Faculty < ChevronRightIcon />
+                        </MenuButton>
+                        <MenuList>
+                            {/* MenuItems are not rendered unless Menu is open */}
+                           <Link to='/faculty'>
+                            <MenuItem>Add Faculty</MenuItem>
+                            </Link>
+                            <Link to='/updatefaculty'>
+                            <MenuItem>Update Faculty</MenuItem>
+                            </Link>
+                        </MenuList>
+                    </Menu>
                     </Link>
                 </div>
             </div>

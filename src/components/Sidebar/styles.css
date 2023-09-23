@@ -8,38 +8,74 @@
 .sides{
     margin-top: 10px;
 }
+.sides p{
+    color: black;
+}
 .side1{
     margin-top: 20px;
+}
+.side1 p{
+    color: black;
 }
 .side2{
 margin-top: 20px;
 }
+.side2 p{
+    color: black;
+}
 .side3{
     margin-top: 20px;
+}
+.side3 p{
+    color: black;
 }
 .side4{
     margin-top: 20px;
 }
+.side4 p{
+    color: black;
+}
 .side5{
     margin-top: 20px;
+}
+.side5 p{
+    color: black;
 }
 .side6{
     margin-top: 20px;
 }
+.side6 p{
+    color: black;
+}
 .side7{
     margin-top: 20px;
+}
+.side7 p{
+    color: black;
 }
 .side8{
     margin-top: 20px;
 }
+.side8 p{
+    color: black;
+}
 .side9{
     margin-top: 20px;
+}
+.side9 p{
+    color: black;
 }
 .side10{
     margin-top: 20px;
 }
+.side10 p{
+    color: black;
+}
 .side11{
     margin-top: 20px;
+}
+.side11 p{
+    color: black;
 }
 Link:hover{
     padding: 17px;
@@ -58,6 +94,9 @@ Link:hover{
     color: #010080;
     background-color: #eee1ff;
 }
+.side3-select p{
+    color: #010080;
+}
 .side1-select{
     padding: 17px;
     width: 90%;
@@ -65,10 +104,16 @@ Link:hover{
     color: #010080;
     background-color: #eee1ff;
 }
+.side1-select p{
+    color: #010080;
+}
 .sides-select{
     padding: 17px;
     width: 90%;
     height: 50%;
     color: #010080;
     background-color: #eee1ff;
+}
+.sides-select p{
+    color: #010080;
 }

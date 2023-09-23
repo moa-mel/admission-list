@@ -20,7 +20,6 @@ import {
     Table,
     Thead,
     Tbody,
-    Tfoot,
     Tr,
     Th,
     Td,
@@ -249,7 +248,11 @@ const Plview = () => {
                                             </Td>
                                         </Tr>
                                     </Tbody>
-                                    <Tfoot>
+                                    
+                                </Table>
+                            </TableContainer>
+                        </div>
+                        <div>
                                         <Menu>
                                             <MenuButton
                                                 aria-label='Options'
@@ -309,10 +312,7 @@ const Plview = () => {
                                                     </Modal>
                                             </MenuList>
                                         </Menu>
-                                    </Tfoot>
-                                </Table>
-                            </TableContainer>
-                        </div>
+                                    </div>
           </div>
           </div>
           </div>

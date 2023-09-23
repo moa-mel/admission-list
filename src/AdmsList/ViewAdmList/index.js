@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import "./styles.css"
 import Navbar from '../../components/Navbar'
 import Sidebar from '../../components/Sidebar'
@@ -36,7 +36,6 @@ import {
 import Modal from 'react-modal';
 
 
-
 const customStyles = {
     content: {
         top: '50%',
@@ -51,49 +50,44 @@ const customStyles = {
     },
 };
 
-const UserManage = () => {
-    let subtitle;
-    const [modalIsOpen, setIsOpen] = React.useState(false);
+const ViewAdmList = () => {
+  let subtitle;
+  const [modalIsOpen, setIsOpen] = React.useState(false);
 
-    function openModal() {
-        setIsOpen(true);
-    }
+  function openModal() {
+      setIsOpen(true);
+  }
 
-    function afterOpenModal() {
-        // references are now sync'd and can be accessed.
-        subtitle.style.color = '#fff';
-    }
+  function afterOpenModal() {
+      // references are now sync'd and can be accessed.
+      subtitle.style.color = '#fff';
+  }
 
-    function handleFormSubmit(event) {
-        event.preventDefault(); // Prevent the default form submission behavior
-        openModal(); // Open the modal when the form is submitted
-    }
+  function handleFormSubmit(event) {
+      event.preventDefault(); // Prevent the default form submission behavior
+      openModal(); // Open the modal when the form is submitted
+  }
 
-    function closeModal() {
-        setIsOpen(false);
-    }
+  function closeModal() {
+      setIsOpen(false);
+  }
 
-    const user = JSON.parse(localStorage.getItem('user'))
-
-    useEffect(()=>{
-     console.log('user')
-   },[])
-
-    return (
-        <div className='userManage'>
-            <Navbar />
-            <div className='user-container'>
-                <Sidebar />
-                <div className='user-side'>
-                    <div className='user-contain'>
-                        {/*top*/}
-                        <div className='user1'>
+  return (
+    <div>
+         <Navbar />
+    <div className='vadmlst-container'>
+      <Sidebar />
+      <div className='vadmlst-content'>
+        <div className='vadmlst-contain'>
+        <h2 className='vadmlst-h2'>Admission list</h2>
+        <div className='user1'>
+          
                             <div className='user2'>
-                                <div className='user-one'>
-                                    <Link to="/adduser">
-                                        <div className='user-add'>
+                                <div className='vadmlst-one'>
+                                    <Link to="/">
+                                        <div className='vadmlst-add'>
                                             <img src={stream} alt='' className='us-img1' />
-                                            <p>Add User</p>
+                                            <p className='vadmlst-p'>Add a student</p>
                                         </div>
                                     </Link>
                                 </div>
@@ -112,6 +106,21 @@ const UserManage = () => {
                                 </div>
                             </div>
                         </div>
+                        <div className='vadmlst-sub'>
+                          <div className='vadmlst-p2'>
+                          <p>Faculty:</p>
+                          <p>Faculty of Technology</p>
+                          </div>
+                          <div className='vadmlst-p3'>
+                          <p>Program:</p>
+                          <p>Elect & Elect Engineering</p>
+                          </div>
+                        </div>
+                        <div className='vadmlst-subs'>
+                          <p>Session :</p>
+                          <p>2022/2023</p>
+                        </div>
+
                         {/*topTable*/}
                         <div className='top-table'>
                             <div className='ttable'>
@@ -159,35 +168,105 @@ const UserManage = () => {
                                 <Table variant='simple' size="sm" >
                                     <Thead>
                                         <Tr>
-                                            <Th isNumeric>id</Th>
-                                            <Th>Title</Th>
-                                            <Th>First Name</Th>
-                                            <Th>Last Name</Th>
-                                            <Th>Middle Name</Th>
-                                            <Th>Phone Number 1</Th>
-                                            <Th>Phone Number 2</Th>
-                                            <Th>E-mail</Th>
-                                            <Th>setAccount type</Th>
+                                            <Th isNumeric fontSize="5px">S/N</Th>
+                                            <Th fontSize="5px">Reg No</Th>
+                                            <Th fontSize="5px">Full Name</Th>
+                                            <Th fontSize="5px">Sex</Th>
+                                            <Th fontSize="5px">State</Th>
+                                            <Th fontSize="5px">Subject Code</Th>
+                                            <Th fontSize="5px">Faculty</Th>
+                                            <Th fontSize="5px">Program</Th>
+                                            <Th fontSize="5px">Utme <br/>score</Th>
+                                            <Th fontSize="5px">O’level</Th>
+                                            <Th fontSize="5px">Putme <br/>score</Th>
+                                            <Th fontSize="5px">Putme <br/>screen<br/>ing</Th>
+                                            <Th fontSize="5px">Aggr<br/>egate</Th>
                                         </Tr>
                                     </Thead>
                                     <Tbody>
                                         <Tr>
                                             <Td isNumeric fontSize="11.5px">
-                                                   {user.user.id}
+                                                <div className='ola'>
+                                                    <img src={grply} alt='' />
+                                                    <p>1</p>
+                                                </div>
                                             </Td>
-                                            <Td fontSize="11.5px">{user.user.title}</Td>
-                                            <Td fontSize="11.5px">{user.user.first_name}</Td>
-                                            <Td fontSize="11.5px">{user.user.middle_name}</Td>
-                                            <Td fontSize="11.5px">{user.user.last_name}</Td>
-                                            <Td fontSize="11.5px">{user.user.phone_1}</Td>
-                                            <Td fontSize="11.5px">{user.user.phone_2}</Td>
-                                            <Td fontSize="11.5px">{user.user.email}</Td>
-                                            <Td fontSize="11.5px">{user.user.account_type}</Td>
+                                            <Td fontSize="11.5px">2023302344356DA</Td>
+                                            <Td fontSize="11.5px">Nasir Fatimah Olawumi</Td>
+                                            <Td fontSize="11.5px">F</Td>
+                                            <Td fontSize="11.5px">Osun</Td>
+                                            <Td fontSize="11.5px">
+                                              <div className='vadmlst-div'>
+                                                <p>Eng</p>
+                                                <p>Chm</p>
+                                                <p>Mth</p>
+                                                <p>Phy</p>
+                                              </div>
+                                            </Td>
+                                            <Td fontSize="11.5px">Faculty of Technology</Td>
+                                            <Td fontSize="11.5px">Elect & Elect Engineering</Td>
+                                            <Td fontSize="11.5px">399</Td>
+                                            <Td fontSize="11.5px">10</Td>
+                                            <Td fontSize="11.5px">389</Td>
+                                            <Td fontSize="11.5px">99.9</Td>
+                                            <Td fontSize="11.5px">80.5</Td> 
+                                        </Tr>
+                                        <Tr>
+                                            <Td isNumeric fontSize="11.5px">
+                                                <div className='ola'>
+                                                    <img src={rplay} alt='' />
+                                                    <p>2</p>
+                                                </div>
+                                            </Td>
+                                            <Td fontSize="11.5px">2023302344356DA</Td>
+                                            <Td fontSize="11.5px">Nasir Fatimah Olawumi</Td>
+                                            <Td fontSize="11.5px">F</Td>
+                                            <Td fontSize="11.5px">Osun</Td>
+                                            <Td fontSize="11.5px">
+                                              <div className='vadmlst-div'>
+                                                <p>Eng</p>
+                                                <p>Chm</p>
+                                                <p>Mth</p>
+                                                <p>Phy</p>
+                                              </div>
+                                            </Td>
+                                            <Td fontSize="11.5px">Faculty of Technology</Td>
+                                            <Td fontSize="11.5px">Elect & Elect Engineering</Td>
+                                            <Td fontSize="11.5px">399</Td>
+                                            <Td fontSize="11.5px">10</Td>
+                                            <Td fontSize="11.5px">389</Td>
+                                            <Td fontSize="11.5px">99.9</Td>
+                                            <Td fontSize="11.5px">80.5</Td> 
+                                        </Tr>
+                                        <Tr>
+                                            <Td isNumeric fontSize="11.5px">
+                                                <div className='ola'>
+                                                    <img src={grply} alt='' />
+                                                    <p>3</p>
+                                                </div>
+                                            </Td>
+                                            <Td fontSize="11.5px">2023302344356DA</Td>
+                                            <Td fontSize="11.5px">Nasir Fatimah Olawumi</Td>
+                                            <Td fontSize="11.5px">F</Td>
+                                            <Td fontSize="11.5px">Osun</Td>
+                                            <Td fontSize="11.5px">
+                                              <div className='vadmlst-div'>
+                                                <p>Eng</p>
+                                                <p>Chm</p>
+                                                <p>Mth</p>
+                                                <p>Phy</p>
+                                              </div>
+                                            </Td>
+                                            <Td fontSize="11.5px">Faculty of Technology</Td>
+                                            <Td fontSize="11.5px">Elect & Elect Engineering</Td>
+                                            <Td fontSize="11.5px">399</Td>
+                                            <Td fontSize="11.5px">10</Td>
+                                            <Td fontSize="11.5px">389</Td>
+                                            <Td fontSize="11.5px">99.9</Td>
+                                            <Td fontSize="11.5px">80.5</Td> 
                                         </Tr>
                                     </Tbody>
-                                </Table>
-                            </TableContainer>
-                            <div>
+                                    <Tfoot>
                                         <Menu>
                                             <MenuButton
                                                 aria-label='Options'
@@ -196,7 +275,7 @@ const UserManage = () => {
                                                 <img src={menu} alt='' />
                                             </MenuButton>
                                             <MenuList>
-                                                <Link to="/updateuser">
+                                                <Link to="/">
                                                     <MenuItem >
                                                         Update
                                                     </MenuItem>
@@ -247,13 +326,15 @@ const UserManage = () => {
                                                     </Modal>
                                             </MenuList>
                                         </Menu>
-                                    </div>
+                                    </Tfoot>
+                                </Table>
+                            </TableContainer>
                         </div>
-                    </div>
-                </div>
-            </div>
         </div>
-    )
+        </div>
+        </div>
+    </div>
+  )
 }
 
-export default UserManage
+export default ViewAdmList

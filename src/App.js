@@ -7,7 +7,6 @@ import {
 } from 'react-router-dom';
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import Register from "./pages/Register";
 import Verify from "./pages/Verify";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetEmail from "./pages/ResetEmail";
@@ -22,7 +21,7 @@ import AdmissionList from "./pages/AdmissionList"
 import Session from "./pages/Session"
 import UpdatePassword from "./pages/UpdatePassword"
 import Help from "./pages/Help"
-import SignOut from "./pages/SignOut"
+import Faculty from "./pages/Faculty"
 import AddUser from "./user/AddUser";
 import UpdateUser from "./user/UpdateUser";
 import Plview from "./program/Plview";
@@ -39,6 +38,10 @@ import Addelds from "./AdmissionCrit/Addelds";
 import Updatecatch from "./AdmissionCrit/Updatecatch"
 import Updatemerit from "./AdmissionCrit/Updatemerit"
 import Updateelds from "./AdmissionCrit/Updateelds"
+import DownloadList from "./AdmsList/DownloadList";
+import ViewAdmList from "./AdmsList/ViewAdmList"
+import UpdateFaculty from "./Facult/UpdateFaculty";
+import ViewFaculty from "./Facult/ViewFaculty";
 
 
 function App() {
@@ -48,7 +51,6 @@ function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
       <Route path="/verify" element={<Verify />} />
       <Route path="/forgotpassword" element={<ForgotPassword />} />
       <Route path="/resetemail" element={<ResetEmail/>} />
@@ -63,7 +65,7 @@ function App() {
       <Route path="/session" element={<Session/>} />
       <Route path="/updatepassword" element={<UpdatePassword/>} />
       <Route path="/help" element={<Help/>} />
-      <Route path="/signout" element={<SignOut/>} />
+      <Route path="/faculty" element={<Faculty/>} />
       <Route path="/adduser" element={<AddUser/>} />
       <Route path="/updateuser" element={<UpdateUser/>} />
       <Route path="/plview" element={<Plview/>} />
@@ -80,6 +82,10 @@ function App() {
       <Route path="/updatecatch" element={<Updatecatch/>} />
       <Route path="/updatemerit" element={<Updatemerit/>} />
       <Route path="/updateelds" element={<Updateelds/>} />
+      <Route path="/downloadlist" element={<DownloadList/>} />
+      <Route path="/viewlist" element={<ViewAdmList/>} />
+      <Route path="/viewfaculty" element={<ViewFaculty/>} />
+      <Route path="/updatefaculty" element={<UpdateFaculty/>} />
       </Routes>
       </Router>
     </div>
