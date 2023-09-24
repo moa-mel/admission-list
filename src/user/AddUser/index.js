@@ -77,11 +77,12 @@ const AddUser = () => {
             color='black'
             width="335px"
           >
-            <option value='option1'>Prof</option>
-            <option value='option2'>Dr</option>
-            <option value='option3'>Mr</option>
-            <option value='option3'>Mrs</option>
-            <option value='option3'>Miss</option>
+  
+            <option value='Prof'>Prof</option>
+            <option value='Dr'>Dr</option>
+            <option value='Mr'>Mr</option>
+            <option value='Mrs'>Mrs</option>
+            <option value='Miss'>Miss</option>
 
           </Select>
           <label>First Name</label>
@@ -142,8 +143,8 @@ const AddUser = () => {
             borderColor='#000'
             color='black'
             width="335px">
-            <option value='option1'>Admin</option>
-            <option value='option2'>Dean</option>
+            <option value='Admin'>Admin</option>
+            <option value='Dean'>Dean</option>
           </Select>
             <button className='ads-but'
             onClick={handleAddUsers}>Add</button>

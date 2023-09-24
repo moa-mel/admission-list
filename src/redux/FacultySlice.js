@@ -7,30 +7,47 @@ import {remote_url} from '../config'
 export const getFaculty = createAsyncThunk(
     'faculties/getfaculty',
     async (faculty, { dispatch }) => {
+      const token = '2|9kd74XHJPWoZD4qKichvW4OACl5q0puVobdikBNk69b85d99'; 
+      localStorage.setItem('token_superAdmin', token);
+
       const { old_subject_code, new_subject_code, subject } = faculty;
   
+    
+
       try {
         const response = await axios.get(`${remote_url}/api/v1/superadmin/faculty/list`, {
           params: {
             pagination: 50,
-          },
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          data: {
             old_subject_code,
             new_subject_code,
             subject,
           },
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
         });
+        
+              
         // Assuming the response contains the data you need
         const data = response.data;
         return data;
       } catch (error) {
-        // Handle errors appropriately
+        // Log the detailed error information
         console.error('Error fetching faculty:', error);
+        console.error('Error message:', error.message);
+        console.error('Error stack:', error.stack);
+        
+        // If the error object has a response property, it means the server has responded with an error status code.
+        if (error.response) {
+          console.error('Server Response:', error.response);
+          console.error('Response Status:', error.response.status);
+          console.error('Response Data:', error.response.data);
+        }
+        
         throw error;
       }
+      
     }
   );
   
@@ -38,26 +55,52 @@ export const getFaculty = createAsyncThunk(
 
   export const addFaculty = createAsyncThunk(
     'faculties/addFaculty',
-    async (faculty, { dispatch }) => {
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(faculty)
-        };
-      const response = await fetch(`{{remote_url}}/api/v1/superadmin/faculty/add`,requestOptions).then(
-          (data) => data.json()
-      )
-      const finalPayload = response
-      return finalPayload;
-     }
-  )
-
+    async (faculty, { dispatch, rejectWithValue }) => {
+      const token = '2|9kd74XHJPWoZD4qKichvW4OACl5q0puVobdikBNk69b85d99'; 
+      localStorage.setItem('token_superAdmin', token);
+    
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(faculty)
+      };
+      
+      try {
+        const response = await fetch(`${remote_url}/api/v1/superadmin/faculty/add`, requestOptions);
+        
+        if (!response.ok) {
+          const errorMessage = `Error: ${response.status} ${response.statusText}`;
+          console.error(errorMessage);
+          return rejectWithValue(errorMessage);
+        }
+        
+        const data = await response.json();
+  
+        // After successfully adding the faculty, dispatch getFaculty to update the faculties list in the state.
+        dispatch(getFaculty());
+        
+        return data;
+        
+      } catch (error) {
+        console.error('Error adding faculty:', error);
+        return rejectWithValue(error.toString());
+      }
+    }
+  );  
   export const updateFaculty = createAsyncThunk(
     'faculties/updateFaculty',
     async (faculty, { dispatch }) => {
+      const token = '2|9kd74XHJPWoZD4qKichvW4OACl5q0puVobdikBNk69b85d99'; // Replace with the actual token
+      localStorage.setItem('token_superAdmin', token);
+
       const requestOptions = {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Authorization': `Bearer ${token}`, 
+            'Content-Type': 'application/json' },
           body: JSON.stringify(faculty)
       };
       const response =  await fetch(`${remote_url}/api/v1/superadmin/faculty/edit`,requestOptions).then(
@@ -71,9 +114,13 @@ export const getFaculty = createAsyncThunk(
   export const deleteFaculty = createAsyncThunk(
     'faculties/deleteFaculty',
     async (faculty, { dispatch }) => {
+      const token = '2|9kd74XHJPWoZD4qKichvW4OACl5q0puVobdikBNk69b85d99'; // Replace with the actual token
+      localStorage.setItem('token_superAdmin', token);
       const requestOptions = {
           method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Authorization': `Bearer ${token}`, 
+            'Content-Type': 'application/json' },
           body: JSON.stringify(faculty)
       };
       const response =  await fetch(`${remote_url}/api/v1/superadmin/faculty/delete`,requestOptions).then(
@@ -100,17 +147,19 @@ export const getFaculty = createAsyncThunk(
           },
           [getFaculty.fulfilled]: (state, { payload }) => {
             state.loading = false
-            state.faculties = payload
+            // Ensure you are accessing the faculties data correctly
+            state.faculties = payload.faculties.data
           },
-          [getFaculty.rejected]: (state) => {
+                    [getFaculty.rejected]: (state) => {
             state.loading = false
           },
            
           //set post Product
-          [addFaculty.fulfilled]:(state,{payload})=>{
-             state.faculties.push(payload);
-          },
-     
+          [addFaculty.fulfilled]: (state, { payload }) => {
+            console.log('Payload from addFaculty:', payload);
+            state.faculties.push(payload);
+         },
+              
           //set update Product
           [updateFaculty.fulfilled]:(state,{payload})=>{
             const index = state.faculties.findIndex(faculty => faculty.id === payload.id);

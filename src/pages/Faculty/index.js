@@ -4,23 +4,23 @@ import Navbar from '../../components/Navbar'
 import Sidebar from '../../components/Sidebar'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
-import { getFaculty } from '../../redux/FacultySlice'
+import { getFaculty, addFaculty } from '../../redux/FacultySlice'
 
 const Faculty = () => {
     const dispatch  = useDispatch();
   const navigate = useNavigate();
   const [facut, setFacut] = useState("");
 
-  const add_faculty = async ()=>{
+  const add_faculty = async () => {
     let faculty = {
-        faculty:facut,
-       
+      faculty: facut,
     }
-    console.log(faculty)
-    //dispatch action postAddProduct từ createAsyncThunk
-   await dispatch(getFaculty(faculty))
-   navigate('/viewfaculty');
- }
+    console.log(faculty);
+    await dispatch(addFaculty(faculty)); // Dispatch addFaculty instead of getFaculty
+    await dispatch(getFaculty()); // Optionally, you can re-fetch the faculty list after adding a new one
+    navigate('/viewfaculty');
+  }
+  
 
   return (
     <div className='faculty'>

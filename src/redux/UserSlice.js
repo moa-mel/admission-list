@@ -10,18 +10,21 @@ export const registerUser = createAsyncThunk(
 localStorage.setItem('token_superAdmin', token);
         console.log('Token:', token);
         const headers = {
-            'Token': ` ${token}`,
-            'Content-type' : 'application/json',
+            'Authorization': `Bearer ${token}`, 
+            'Content-Type' : 'application/json',
         }
         try{
             const req = await axios.post(`${remote_url}/api/v1/superadmin/user/register`, userCredentials, {headers}) 
-            const response = await req.data;
+            const response =  req.data;
             localStorage.setItem('user', JSON.stringify(response.data));
             return response.data; 
         }
         catch(err){
-            throw err
+            console.error("Error Message:", err.response.data.message);
+            console.error("Field Errors:", err.response.data.errors);
+                    throw err;
         }
+        
         
     }
 )

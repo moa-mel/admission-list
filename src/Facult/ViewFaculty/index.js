@@ -52,20 +52,25 @@ const ViewFaculty = () => {
   
 
     const dispatch = useDispatch();
-    const { faculties, loading } = useSelector((state) => state.faculties)
+    const { faculties: facultiesArray, loading } = useSelector(state => state.faculties);
     let fetchMount = true;
+
     useEffect(() => {
         if(fetchMount){
             dispatch(getFaculty())
             console.log('Dispatched getFaculty');
-           
         }
         return ()=>{
             fetchMount = false;
         }
     }, [])
 
+
+
     if(loading) return <div>Loading...</div>
+
+    //console.log('Faculties Array: ', facultiesArray); // log the corrected faculties array
+
 
   return (
     <div>
@@ -107,28 +112,28 @@ const ViewFaculty = () => {
                                         </Tr>
                                     </Thead>
                                     <Tbody>
-                                    {faculties.map((faculty,i ) => (
-                                        <Tr key={i}>
-                                            <Td isNumeric fontSize="11.5px">
-                                                <div className='ola'>
-                                                    <img src={grply} alt='' />
-                                                    <p>{faculty.id}</p>
-                                                </div>
-                                            </Td>
-                                            <Td fontSize="11.5px">{faculty.faculty}</Td>
-                                            <Td fontSize="11.5px">
-                                                <div className='status-div'>
-                                                <div className='fac-mini'>
-                                                    <p>Enable</p>
-                                                </div>
-                                                <div className='fac-mini'>
-                                                    <p>Disable</p>
-                                                </div>
-                                                </div>
-                                            </Td>
-                                        </Tr>
-                                         ))}
-                                    </Tbody>
+                            {Array.isArray(facultiesArray) && facultiesArray.map((faculty, i) => (
+                                <Tr key={i}>
+                                    <Td isNumeric fontSize="11.5px">
+                                        <div className='ola'>
+                                            <img src={grply} alt='' />
+                                            <p>{faculty.id}</p>
+                                        </div>
+                                    </Td>
+                                    <Td fontSize="11.5px">{faculty.faculty}</Td>
+                                    <Td fontSize="11.5px">
+                                        <div className='status-div'>
+                                            <div className='fac-mini'>
+                                                <p>Enable</p>
+                                            </div>
+                                            <div className='fac-mini'>
+                                                <p>Disable</p>
+                                            </div>
+                                        </div>
+                                    </Td>
+                                </Tr>
+                            ))}
+                        </Tbody>
                                 </Table>
                             </TableContainer>
                             
