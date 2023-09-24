@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import './styles.css'
 import Navbar from '../../components/Navbar'
 import Sidebar from '../../components/Sidebar'
@@ -52,24 +52,30 @@ const ViewFaculty = () => {
   
 
     const dispatch = useDispatch();
-    const { faculties: facultiesArray, loading } = useSelector(state => state.faculties);
-    let fetchMount = true;
+    const { faculties: facultiesArray, loading, currentPage } = useSelector(state => state.faculties);
+    console.log('facultiesArray:', facultiesArray);
+    console.log('loading:', loading);
+    const [page, setPage] = useState(1); 
+
+let fetchMount = true;
 
     useEffect(() => {
         if(fetchMount){
-            dispatch(getFaculty())
+            dispatch(getFaculty(page))
             console.log('Dispatched getFaculty');
         }
         return ()=>{
             fetchMount = false;
         }
-    }, [])
+    }, [dispatch, page])
 
+     // Handle page change
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+  };
 
 
     if(loading) return <div>Loading...</div>
-
-    //console.log('Faculties Array: ', facultiesArray); // log the corrected faculties array
 
 
   return (
@@ -101,6 +107,21 @@ const ViewFaculty = () => {
                                 <p >Delete</p>
                             </div>
                         </div>
+                        <div className='pagination'>
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        <span>Page {currentPage}</span>
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={facultiesArray.length < 50} // Adjust this based on your API response
+        >
+          Next
+        </button>
+      </div>
                         <div className='rfg'>
                             <TableContainer >
                                 <Table variant='simple' size="sm" >
@@ -112,12 +133,12 @@ const ViewFaculty = () => {
                                         </Tr>
                                     </Thead>
                                     <Tbody>
-                            {Array.isArray(facultiesArray) && facultiesArray.map((faculty, i) => (
-                                <Tr key={i}>
+                                    {Array.isArray(facultiesArray) && facultiesArray.map((faculty, i) => (
+                                <Tr key={faculty.id}>
                                     <Td isNumeric fontSize="11.5px">
                                         <div className='ola'>
                                             <img src={grply} alt='' />
-                                            <p>{faculty.id}</p>
+                                            <p>{i + 1}</p>
                                         </div>
                                     </Td>
                                     <Td fontSize="11.5px">{faculty.faculty}</Td>
@@ -126,7 +147,7 @@ const ViewFaculty = () => {
                                             <div className='fac-mini'>
                                                 <p>Enable</p>
                                             </div>
-                                            <div className='fac-mini'>
+                                            <div className='fac-nimi'>
                                                 <p>Disable</p>
                                             </div>
                                         </div>

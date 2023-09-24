@@ -1,26 +1,27 @@
-import React, {useState} from 'react'
+import React, {useEffect} from 'react'
 import "./styles.css"
 import logo from "../../images/OAU-Logo-PNG 1.png"
+import { useDispatch, useSelector } from 'react-redux';
+import { getUser } from '../../redux/UserSlice';
 
 
-function getUser(){
-  let user = localStorage.getItem('user');
-  if(user){
-    user = JSON.parse(user);
-  }
-  else{
-    user = null;
-  }
-  return user;
-  }
 
 const Navbar = () => {
-  const [user, setUser] = useState(getUser())
+ 
+  const dispatch = useDispatch();
+    const { user: userArray, loading } = useSelector(state => state.user);
+    let fetchMount = true;
 
-  const handleLogout = () =>{
-    localStorage.removeItem('user');
-    setUser(null)
-  }
+    useEffect(() => {
+        if(fetchMount){
+            dispatch(getUser())
+            console.log('Dispatched getUser');
+        }
+        return ()=>{
+            fetchMount = false;
+        }
+    }, [])
+
 
   return (
     <div className='nav'>
@@ -31,14 +32,12 @@ const Navbar = () => {
                 <p className='nav-p'>Obafemi Awolowo University<br />
                             Admission portal</p>
             </div>
-            {user? (
-            <div className='nav-right'>
-                <p className='nr-p'>Welcome {user.first_name},</p>
-                <p className='nr-p1' onClick={handleLogout}>Sign Out</p>
+            {Array.isArray(userArray) && userArray.map((user, i) => (
+            <div className='nav-right' key={i}>
+                <p className='nr-p'>Welcome {user.user.first_name},</p>
+                <p className='nr-p1' >Sign Out</p>
             </div>
-             ):(
-              <p>No Information</p>
-            )}
+             ))}
             </div>
         </div>
     </div>

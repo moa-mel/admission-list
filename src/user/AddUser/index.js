@@ -28,14 +28,7 @@ const AddUser = () => {
       title, email, first_name, last_name, middle_name, phone_1, phone_2, account_type
     }
     dispatch(registerUser(userCredentials)).then((result)=>{
-      toast({
-        title: 'Success',
-        description:'User registered and added successfully' ,
-        position:"top-right",
-        status: 'success',
-        duration: 9000,
-        isClosable: true,
-      });
+    console.log('its working')
     if(result.payload){
       setTitle('')
       setEmail(' ');
@@ -45,17 +38,14 @@ const AddUser = () => {
       setPhone_1(' ')
       setPhone_2(' ')
       setAccount_type(' ')
+      console.log("Navigating to /usermanagement");
       navigate('/usermanagement')
     }
     })
-    .catch((err) =>  toast({
-      title: 'Error',
-      description:err.response.data.message ,
-      position:"top-right",
-      status: 'error',
-      duration: 9000,
-      isClosable: true,
-    }));
+    .catch((error) => {
+      console.error('User registration error:', error);
+      // Handle error here (e.g., display an error message)
+  });
   }
 
   return (
@@ -75,7 +65,7 @@ const AddUser = () => {
             bg='white'
             borderColor='#000'
             color='black'
-            width="335px"
+            width="385px"
           >
   
             <option value='Prof'>Prof</option>

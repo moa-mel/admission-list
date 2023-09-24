@@ -42,7 +42,7 @@ label{
     font-size: 1.1rem;
     font-weight: 500;
     cursor: pointer;
-    width: 100%;
+    width: 80%;
 }
 .ads-but{
     margin-left: 320px;
@@ -74,7 +74,7 @@ label{
     display: block;
     border: none;
     height: 2.5rem;
-    width: 85%;
+    width: 60%;
     margin-left: 20px ;
     margin-bottom: 1.5rem;
     padding: 0.2rem 0.3rem;

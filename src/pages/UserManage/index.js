@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, { useEffect, useState } from 'react'
 import "./styles.css"
 import Navbar from '../../components/Navbar'
 import Sidebar from '../../components/Sidebar'
@@ -34,7 +34,8 @@ import {
     MenuItem,
 } from '@chakra-ui/react'
 import Modal from 'react-modal';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { getUser } from '../../redux/UserSlice'
 
 
 const customStyles = {
@@ -54,6 +55,13 @@ const customStyles = {
 const UserManage = () => {
     let subtitle;
     const [modalIsOpen, setIsOpen] = React.useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [filterStatus, setFilterStatus] = useState("enabled"); // Renamed this variable
+    // Select user data from the Redux store
+    const users = useSelector((state) => state.user.user);
+    const pagination = useSelector((state) => state.user.pagination);
+    const status = useSelector((state) => state.user.status);
+
 
     function openModal() {
         setIsOpen(true);
@@ -73,11 +81,32 @@ const UserManage = () => {
         setIsOpen(false);
     }
 
-    const user = JSON.parse(localStorage.getItem('user'))
 
-    useEffect(()=>{
-     console.log('user')
-   },[])
+    const dispatch = useDispatch();
+
+    // Fetch user data when the component mounts
+    useEffect(() => {
+        dispatch(getUser()); // Dispatch the getUser action
+    }, [dispatch]);
+
+
+
+    const fetchUserData = (page, newStatus) => {
+        dispatch(getUser({ page, status: newStatus }));
+    };
+
+    const handlePageChange = (newPage) => {
+        if (newPage > 0 && newPage <= pagination.total_pages) {
+            setCurrentPage(newPage);
+            fetchUserData(newPage, status);
+        }
+    };
+
+    // Handle status change
+    const handleStatusChange = (newStatus) => {
+        setFilterStatus(newStatus);
+        fetchUserData(1, newStatus); // Reset to page 1 when status changes
+    };
 
     return (
         <div className='userManage'>
@@ -153,6 +182,32 @@ const UserManage = () => {
                                 </Modal>
                             </div>
                         </div>
+
+                        {/* Status filter */}
+                        <div className="status-filter">
+                            <select value={status} onChange={(e) => handleStatusChange(e.target.value)}>
+                                <option value="enabled">Enabled</option>
+                                <option value="disabled">Disabled</option>
+                                {/* Add more status options if needed */}
+                            </select>
+                        </div>
+
+                        {/* Pagination */}
+                        <div className="pagination">
+                            <p>Page {currentPage}</p>
+                            <div className="pagination-controls">
+                                <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+                                    Previous
+                                </button>
+                                <button
+                                    onClick={() => handlePageChange(currentPage + 1)}
+                                    disabled={currentPage === pagination.total_pages}
+                                >
+                                    Next
+                                </button>
+                            </div>
+                        </div>
+
                         {/*table*/}
                         <div className='user-table'>
                             <TableContainer>
@@ -171,83 +226,85 @@ const UserManage = () => {
                                         </Tr>
                                     </Thead>
                                     <Tbody>
-                                        <Tr>
-                                            <Td isNumeric fontSize="11.5px">
-                                                   {user.user.id}
-                                            </Td>
-                                            <Td fontSize="11.5px">{user.user.title}</Td>
-                                            <Td fontSize="11.5px">{user.user.first_name}</Td>
-                                            <Td fontSize="11.5px">{user.user.middle_name}</Td>
-                                            <Td fontSize="11.5px">{user.user.last_name}</Td>
-                                            <Td fontSize="11.5px">{user.user.phone_1}</Td>
-                                            <Td fontSize="11.5px">{user.user.phone_2}</Td>
-                                            <Td fontSize="11.5px">{user.user.email}</Td>
-                                            <Td fontSize="11.5px">{user.user.account_type}</Td>
-                                        </Tr>
+                                        {users.map((user) => (
+                                            <Tr key={user.id}>
+                                                <Td isNumeric fontSize="11.5px">
+                                                    {user.user.id}
+                                                </Td>
+                                                <Td fontSize="11.5px">{user.user.title}</Td>
+                                                <Td fontSize="11.5px">{user.user.first_name}</Td>
+                                                <Td fontSize="11.5px">{user.user.middle_name}</Td>
+                                                <Td fontSize="11.5px">{user.user.last_name}</Td>
+                                                <Td fontSize="11.5px">{user.user.phone_1}</Td>
+                                                <Td fontSize="11.5px">{user.user.phone_2}</Td>
+                                                <Td fontSize="11.5px">{user.user.email}</Td>
+                                                <Td fontSize="11.5px">{user.user.account_type}</Td>
+                                            </Tr>
+                                        ))}
                                     </Tbody>
                                 </Table>
                             </TableContainer>
                             <div>
-                                        <Menu>
-                                            <MenuButton
-                                                aria-label='Options'
-                                                variant='outline'
-                                            >
-                                                <img src={menu} alt='' />
-                                            </MenuButton>
-                                            <MenuList>
-                                                <Link to="/updateuser">
-                                                    <MenuItem >
-                                                        Update
-                                                    </MenuItem>
-                                                </Link>
-                                                <MenuItem onClick={openModal}>
-                                                    Disable
-                                                   </MenuItem>
-                                                    <Modal
-                                                        isOpen={modalIsOpen}
-                                                        onAfterOpen={afterOpenModal}
-                                                        onRequestClose={closeModal}
-                                                        style={customStyles}
-                                                        contentLabel="Disable Modal"
-                                                        ariaHideApp={true}
-                                                    >
-                                                        <h2 ref={(_subtitle) => (subtitle = _subtitle)}>.</h2>
-                                                        <img onClick={closeModal} src={close} alt='' className='usmg-img' />
-                                                        <div className='usmg-box'>
-                                                            <p className='usmg-p'>You are about to disable the following. <br />
-                                                                Kindly enter your password to proceed</p>
-                                                            <input type='text'
-                                                                className='usmg-input'
-                                                                required />
-                                                            <button className='usmg-butt'>Proceed</button>
-                                                        </div>
-                                                    </Modal>
-                                                <MenuItem onClick={openModal}>
-                                                    Delete
-                                                    </MenuItem>
-                                                    <Modal
-                                                        isOpen={modalIsOpen}
-                                                        onAfterOpen={afterOpenModal}
-                                                        onRequestClose={closeModal}
-                                                        style={customStyles}
-                                                        contentLabel="remove Modal"
-                                                        ariaHideApp={true}
-                                                    >
-                                                        <h2 ref={(_subtitle) => (subtitle = _subtitle)}>.</h2>
-                                                        <img onClick={closeModal} src={close} alt='' className='usmg-img' />
-                                                        <div className='usmg-box'>
-                                                            <p className='usmg-p'>You are about to remove the following. <br />
-                                                                Kindly enter your password to proceed</p>
-                                                            <input type='text'
-                                                                className='usmg-input'
-                                                                required />
-                                                            <button className='usmg-butt'>Proceed</button>
-                                                        </div>
-                                                    </Modal>
-                                            </MenuList>
-                                        </Menu>
-                                    </div>
+                                <Menu>
+                                    <MenuButton
+                                        aria-label='Options'
+                                        variant='outline'
+                                    >
+                                        <img src={menu} alt='' />
+                                    </MenuButton>
+                                    <MenuList>
+                                        <Link to="/updateuser">
+                                            <MenuItem >
+                                                Update
+                                            </MenuItem>
+                                        </Link>
+                                        <MenuItem onClick={openModal}>
+                                            Disable
+                                        </MenuItem>
+                                        <Modal
+                                            isOpen={modalIsOpen}
+                                            onAfterOpen={afterOpenModal}
+                                            onRequestClose={closeModal}
+                                            style={customStyles}
+                                            contentLabel="Disable Modal"
+                                            ariaHideApp={true}
+                                        >
+                                            <h2 ref={(_subtitle) => (subtitle = _subtitle)}>.</h2>
+                                            <img onClick={closeModal} src={close} alt='' className='usmg-img' />
+                                            <div className='usmg-box'>
+                                                <p className='usmg-p'>You are about to disable the following. <br />
+                                                    Kindly enter your password to proceed</p>
+                                                <input type='text'
+                                                    className='usmg-input'
+                                                    required />
+                                                <button className='usmg-butt'>Proceed</button>
+                                            </div>
+                                        </Modal>
+                                        <MenuItem onClick={openModal}>
+                                            Delete
+                                        </MenuItem>
+                                        <Modal
+                                            isOpen={modalIsOpen}
+                                            onAfterOpen={afterOpenModal}
+                                            onRequestClose={closeModal}
+                                            style={customStyles}
+                                            contentLabel="remove Modal"
+                                            ariaHideApp={true}
+                                        >
+                                            <h2 ref={(_subtitle) => (subtitle = _subtitle)}>.</h2>
+                                            <img onClick={closeModal} src={close} alt='' className='usmg-img' />
+                                            <div className='usmg-box'>
+                                                <p className='usmg-p'>You are about to remove the following. <br />
+                                                    Kindly enter your password to proceed</p>
+                                                <input type='text'
+                                                    className='usmg-input'
+                                                    required />
+                                                <button className='usmg-butt'>Proceed</button>
+                                            </div>
+                                        </Modal>
+                                    </MenuList>
+                                </Menu>
+                            </div>
                         </div>
                     </div>
                 </div>

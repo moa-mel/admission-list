@@ -5,17 +5,15 @@ import {remote_url} from '../config'
 
   
 export const getFaculty = createAsyncThunk(
-    'faculties/getfaculty',
+    'faculties/getFaculty',
     async (faculty, { dispatch }) => {
       const token = '2|9kd74XHJPWoZD4qKichvW4OACl5q0puVobdikBNk69b85d99'; 
       localStorage.setItem('token_superAdmin', token);
 
-      const { old_subject_code, new_subject_code, subject } = faculty;
-  
-    
+      const { old_subject_code, new_subject_code, subject } = faculty
 
       try {
-        const response = await axios.get(`${remote_url}/api/v1/superadmin/faculty/list`, {
+        const response = await axios.get(`${remote_url}/api/v1/superadmin/faculty/list?pagination=50`, {
           params: {
             pagination: 50,
             old_subject_code,
@@ -135,7 +133,8 @@ export const getFaculty = createAsyncThunk(
     loading:false,
     faculties:[],
     isFetchFacultyID:false,
-    faculty:{}
+    faculty:{},
+    currentPage: 1, 
   };
   export const facultySlice = createSlice({
     name: 'faculties',
@@ -147,8 +146,8 @@ export const getFaculty = createAsyncThunk(
           },
           [getFaculty.fulfilled]: (state, { payload }) => {
             state.loading = false
-            // Ensure you are accessing the faculties data correctly
             state.faculties = payload.faculties.data
+            state.currentPage = payload.currentPage;
           },
                     [getFaculty.rejected]: (state) => {
             state.loading = false
@@ -158,7 +157,7 @@ export const getFaculty = createAsyncThunk(
           [addFaculty.fulfilled]: (state, { payload }) => {
             console.log('Payload from addFaculty:', payload);
             state.faculties.push(payload);
-         },
+          },
               
           //set update Product
           [updateFaculty.fulfilled]:(state,{payload})=>{
