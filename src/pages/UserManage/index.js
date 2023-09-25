@@ -58,7 +58,7 @@ const UserManage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [filterStatus, setFilterStatus] = useState("enabled"); // Renamed this variable
     // Select user data from the Redux store
-    const users = useSelector((state) => state.user.user);
+    const newUser = useSelector((state) => state.user.newUser);
     const pagination = useSelector((state) => state.user.pagination);
     const status = useSelector((state) => state.user.status);
 
@@ -107,6 +107,10 @@ const UserManage = () => {
         setFilterStatus(newStatus);
         fetchUserData(1, newStatus); // Reset to page 1 when status changes
     };
+
+    useEffect(() => {
+        fetchUserData(currentPage, status);
+    }, [currentPage, status]);
 
     return (
         <div className='userManage'>
@@ -193,6 +197,7 @@ const UserManage = () => {
                         </div>
 
                         {/* Pagination */}
+                        {pagination && (
                         <div className="pagination">
                             <p>Page {currentPage}</p>
                             <div className="pagination-controls">
@@ -207,7 +212,8 @@ const UserManage = () => {
                                 </button>
                             </div>
                         </div>
-
+                        )}
+                        
                         {/*table*/}
                         <div className='user-table'>
                             <TableContainer>
@@ -226,19 +232,19 @@ const UserManage = () => {
                                         </Tr>
                                     </Thead>
                                     <Tbody>
-                                        {users.map((user) => (
+                                        {newUser.map((user, i) => (
                                             <Tr key={user.id}>
                                                 <Td isNumeric fontSize="11.5px">
-                                                    {user.user.id}
+                                                    {i+1}
                                                 </Td>
-                                                <Td fontSize="11.5px">{user.user.title}</Td>
-                                                <Td fontSize="11.5px">{user.user.first_name}</Td>
-                                                <Td fontSize="11.5px">{user.user.middle_name}</Td>
-                                                <Td fontSize="11.5px">{user.user.last_name}</Td>
-                                                <Td fontSize="11.5px">{user.user.phone_1}</Td>
-                                                <Td fontSize="11.5px">{user.user.phone_2}</Td>
-                                                <Td fontSize="11.5px">{user.user.email}</Td>
-                                                <Td fontSize="11.5px">{user.user.account_type}</Td>
+                                                <Td fontSize="11.5px">{user.title}</Td>
+                                                <Td fontSize="11.5px">{user.first_name}</Td>
+                                                <Td fontSize="11.5px">{user.middle_name}</Td>
+                                                <Td fontSize="11.5px">{user.last_name}</Td>
+                                                <Td fontSize="11.5px">{user.phone_1}</Td>
+                                                <Td fontSize="11.5px">{user.phone_2}</Td>
+                                                <Td fontSize="11.5px">{user.email}</Td>
+                                                <Td fontSize="11.5px">{user.account_type}</Td>
                                             </Tr>
                                         ))}
                                     </Tbody>

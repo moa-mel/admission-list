@@ -6,12 +6,11 @@ import { useNavigate } from 'react-router-dom';
 import { Select } from '@chakra-ui/react'
 import GB from "../../images/Go back.png"
 import { useDispatch } from 'react-redux';
-import { registerUser } from '../../redux/UserSlice';
+import { registerUser, getUser } from '../../redux/UserSlice';
 import { useToast } from "@chakra-ui/react";
 
 const AddUser = () => {
   const navigate = useNavigate()
-  const  toast = useToast();
   const [title, setTitle] = useState('')
   const [email, setEmail] = useState('')
   const [first_name, setFirst_name] = useState('')
@@ -24,28 +23,12 @@ const AddUser = () => {
   const dispatch = useDispatch();
   const handleAddUsers=(e)=>{
     e.preventDefault();
-    let userCredentials={
+    let newUser={
       title, email, first_name, last_name, middle_name, phone_1, phone_2, account_type
     }
-    dispatch(registerUser(userCredentials)).then((result)=>{
-    console.log('its working')
-    if(result.payload){
-      setTitle('')
-      setEmail(' ');
-      setFirst_name(' ')
-      setLast_name(' ')
-      setMiddle_name(' ')
-      setPhone_1(' ')
-      setPhone_2(' ')
-      setAccount_type(' ')
-      console.log("Navigating to /usermanagement");
-      navigate('/usermanagement')
-    }
-    })
-    .catch((error) => {
-      console.error('User registration error:', error);
-      // Handle error here (e.g., display an error message)
-  });
+    dispatch(registerUser(newUser))
+   dispatch(getUser());
+   navigate('/usermanagement');
   }
 
   return (

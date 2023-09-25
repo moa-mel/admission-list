@@ -4,30 +4,29 @@ import { remote_url } from '../config'
 
 
 export const registerUser = createAsyncThunk(
-    'user/registerUser',
-    async (userCredentials) => {
-        const token = '2|9kd74XHJPWoZD4qKichvW4OACl5q0puVobdikBNk69b85d99'; // Replace with the actual token
-        localStorage.setItem('token_superAdmin', token);
-        console.log('Token:', token);
-        const headers = {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
+    "user/registerUser",
+    async (newUser, thunkAPI) => {
+  const token = '2|9kd74XHJPWoZD4qKichvW4OACl5q0puVobdikBNk69b85d99'; // Replace with the actual token
+          localStorage.setItem('token_superAdmin', token);
+      try {
+        const config = {
+          headers: {
+  'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
         }
-        try {
-            const req = await axios.post(`${remote_url}/api/v1/superadmin/user/register`, userCredentials, { headers })
-            const response = req.data;
-            localStorage.setItem('user', JSON.stringify(response.data));
-            const { title, email, first_name, last_name, middle_name, phone_1, phone_2, account_type } = userCredentials;
-            console.log('User credentials:', title, email, first_name, last_name, middle_name, phone_1, phone_2, account_type);
-            return response.data;
-        }
-        catch (err) {
-            console.error("Error Message:", err.response.data.message);
-            console.error("Field Errors:", err.response.data.errors);
-            throw err;
-        }
-    }
-)
+        const body = JSON.stringify(newUser);
+        const { data } = await axios.post(`${remote_url}/api/v1/superadmin/user/register`
+  , body, config);
+        console.log(data);
+        const { title, email, first_name, last_name, middle_name, phone_1, phone_2, account_type } = newUser;
+        return data;
+      } catch (error) {
+        console.error(error.response.data);
+        return thunkAPI.rejectWithValue(error.response.data);
+      }
+    },
+  );
 
 
 export const loginUser = createAsyncThunk(
@@ -42,7 +41,7 @@ export const loginUser = createAsyncThunk(
 
 export const getUser = createAsyncThunk(
     'user/getUser',
-    async ({ page, status, email, password }) => {
+    async ({ status, email, password }) => {
         const token = '2|9kd74XHJPWoZD4qKichvW4OACl5q0puVobdikBNk69b85d99';
         localStorage.setItem('token_superAdmin', token);
 
@@ -51,7 +50,6 @@ export const getUser = createAsyncThunk(
                 params: {
                     pagination: 50,
                     status: status || 'enabled', // Default status value
-                    page,
                     email,
                     password,
                 },
@@ -86,7 +84,10 @@ const userSlice = createSlice({
         loading: false,
         user: [],
         error: null,
-        pagination: {},
+        pagination: {
+            total_pages: 1,
+        },
+        newUser: []
     },
 
     extraReducers: (builder) => {
@@ -136,8 +137,9 @@ const userSlice = createSlice({
             })
             .addCase(getUser.fulfilled, (state, action) => {
                 state.loading = false
-                state.users = action.payload.faculties.data;
-                // Add pagination and status to the state
+                if (action.payload.user) {
+                    state.user = action.payload.user.data;
+                }
                 state.pagination = action.payload.pagination;
                 state.status = action.payload.status;
             })
