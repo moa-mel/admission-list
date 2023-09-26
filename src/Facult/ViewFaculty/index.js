@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import './styles.css'
 import Navbar from '../../components/Navbar'
 import Sidebar from '../../components/Sidebar'
@@ -18,20 +18,11 @@ import {
     Td,
     TableContainer,
 } from '@chakra-ui/react'
-import {
-    Menu,
-    MenuButton,
-    MenuList,
-    MenuItem,
-} from '@chakra-ui/react'
-import Modal from 'react-modal';
-import rplay from "../../images/Vector(2).png"
 import grply from "../../images/Vector(3).png"
-import close from "../../images/ic_baseline-cancel.png"
 import delet from "../../images/Vector(4).png"
 import { useDispatch, useSelector } from 'react-redux';
 import { getFaculty, deleteFaculty } from '../../redux/FacultySlice'
-import { v4 as uuidv4 } from 'uuid';
+import { Link } from 'react-router-dom';
 
 const customStyles = {
     content: {
@@ -49,44 +40,44 @@ const customStyles = {
 
 
 const ViewFaculty = () => {
-  
+
 
     const dispatch = useDispatch();
     const { faculties: facultiesArray, loading, currentPage } = useSelector(state => state.faculties);
     console.log('facultiesArray:', facultiesArray);
     console.log('loading:', loading);
-    const [page, setPage] = useState(1); 
+    const [page, setPage] = useState(1);
 
-let fetchMount = true;
+    let fetchMount = true;
 
     useEffect(() => {
-        if(fetchMount){
+        if (fetchMount) {
             dispatch(getFaculty(page))
             console.log('Dispatched getFaculty');
         }
-        return ()=>{
+        return () => {
             fetchMount = false;
         }
     }, [dispatch, page])
 
-     // Handle page change
-  const handlePageChange = (newPage) => {
-    setPage(newPage);
-  };
+    // Handle page change
+    const handlePageChange = (newPage) => {
+        setPage(newPage);
+    };
 
 
-    if(loading) return <div>Loading...</div>
+    if (loading) return <div>Loading...</div>
 
 
-  return (
-    <div>
- <Navbar />
+    return (
+        <div>
+            <Navbar />
             <div className='vf-container'>
                 <Sidebar />
                 <div className='vf-content'>
                     <div className='vf-contain'>
-                    
-                    <div className='top-table'>
+
+                        <div className='top-table'>
                             <div className='ttable'>
                                 <p className='tt-p'>Show</p>
                                 <div className='tt-num'>
@@ -108,20 +99,20 @@ let fetchMount = true;
                             </div>
                         </div>
                         <div className='pagination'>
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-        <span>Page {currentPage}</span>
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={facultiesArray.length < 50} // Adjust this based on your API response
-        >
-          Next
-        </button>
-      </div>
+                            <button
+                                onClick={() => handlePageChange(currentPage - 1)}
+                                disabled={currentPage === 1}
+                            >
+                                Previous
+                            </button>
+                            <span>Page {currentPage}</span>
+                            <button
+                                onClick={() => handlePageChange(currentPage + 1)}
+                                disabled={facultiesArray.length < 50} // Adjust this based on your API response
+                            >
+                                Next
+                            </button>
+                        </div>
                         <div className='rfg'>
                             <TableContainer >
                                 <Table variant='simple' size="sm" >
@@ -133,38 +124,50 @@ let fetchMount = true;
                                         </Tr>
                                     </Thead>
                                     <Tbody>
-                                    {Array.isArray(facultiesArray) && facultiesArray.map((faculty, i) => (
-                                <Tr key={faculty.id}>
-                                    <Td isNumeric fontSize="11.5px">
-                                        <div className='ola'>
-                                            <img src={grply} alt='' />
-                                            <p>{i + 1}</p>
-                                        </div>
-                                    </Td>
-                                    <Td fontSize="11.5px">{faculty.faculty}</Td>
-                                    <Td fontSize="11.5px">
-                                        <div className='status-div'>
-                                            <div className='fac-mini'>
-                                                <p>Enable</p>
-                                            </div>
-                                            <div className='fac-nimi'>
-                                                <p>Disable</p>
-                                            </div>
-                                        </div>
-                                    </Td>
-                                </Tr>
-                            ))}
-                        </Tbody>
+                                        {Array.isArray(facultiesArray) && facultiesArray.map((faculty, i) => (
+                                            <Tr key={faculty.id}>
+                                                <Td isNumeric fontSize="11.5px">
+                                                    <div className='ola'>
+                                                        <img src={grply} alt='' />
+                                                        <p>{i + 1}</p>
+                                                    </div>
+                                                </Td>
+                                                <Td fontSize="11.5px">{faculty.faculty}</Td>
+                                                <Td fontSize="11.5px">
+                                                    <div className='status-div'>
+                                                        <div className='fac-mini'>
+                                                            <p>Enable</p>
+                                                        </div>
+                                                        <div className='fac-nimi'>
+                                                            <p>Disable</p>
+                                                        </div>
+                                                    </div>
+                                                </Td>
+                                                <Td>
+                                                    <div className='vf-action'>
+                                                        <div>
+                                                            <Link to={`/faculty/${faculty.id}/edit`}>
+                                                                <p>Edit</p>
+                                                            </Link>
+                                                        </div>
+                                                        <div>
+                                                            <p onClick={() => dispatch(deleteFaculty(faculty))}>Delete</p>
+                                                        </div>
+                                                    </div>
+                                                </Td>
+                                            </Tr>
+                                        ))}
+                                    </Tbody>
                                 </Table>
                             </TableContainer>
-                            
-                            </div>
+
+                        </div>
                     </div>
-                   
-                    </div>
-                    </div>
-    </div>
-  )
+
+                </div>
+            </div>
+        </div>
+    )
 }
 
 export default ViewFaculty

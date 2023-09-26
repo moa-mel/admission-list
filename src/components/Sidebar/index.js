@@ -42,7 +42,7 @@ const Sidebar = () => {
                     </Menu>
                 </div>
                 <div className={active==="program"?'side3-select':"side3"}>
-                    <Link to="/programlist">
+                    <Link to="/addprogram">
                     <p onClick={(e)=>setActive("program")}>
                             Program List < ChevronRightIcon />
                             </p>

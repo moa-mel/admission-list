@@ -1,13 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import "./styles.css"
 import Navbar from '../../components/Navbar'
 import Sidebar from '../../components/Sidebar'
 import stream from "../../images/streamline_interface-add-circle-button-remove-cross-add-buttons-plus-circle.png"
 import excel from "../../images/Vector(1).png"
-import rplay from "../../images/Vector(2).png"
 import grply from "../../images/Vector(3).png"
 import delet from "../../images/Vector(4).png"
-import menu from "../../images/Vector(1) 2.png"
 import close from "../../images/ic_baseline-cancel.png"
 import {
     NumberInput,
@@ -26,13 +24,10 @@ import {
     TableContainer,
 } from '@chakra-ui/react'
 import { Link } from 'react-router-dom';
-import {
-    Menu,
-    MenuButton,
-    MenuList,
-    MenuItem,
-} from '@chakra-ui/react'
 import Modal from 'react-modal';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCourse, deleteCourse } from '../../redux/CourseSlice'
+
 
 const customStyles = {
     content: {
@@ -70,18 +65,49 @@ const Plview = () => {
         setIsOpen(false);
     }
 
-  return (
-    <div className='plview'>
-      <Navbar />
-      <div className='plv-container'>
-        <Sidebar />
-        <div className='plv-content'>
-          <div className='plv-contain'>
-          <p>Program List</p>
-          <div className='user1'>
-          
+    const dispatch = useDispatch();
+    const { courses: coursesArray, loading, currentPage } = useSelector(state => state.courses);
+    console.log('coursesArray:', coursesArray);
+    console.log('loading:', loading);
+    const [page, setPage] = useState(1);
+
+    let fetchMount = true;
+
+    useEffect(() => {
+        if (fetchMount) {
+            dispatch(getCourse(page))
+            console.log('Dispatched getCourse');
+        }
+        return () => {
+            fetchMount = false;
+        }
+    }, [dispatch, page])
+
+   /* useEffect(() => {
+        console.log('Redux State:', coursesArray); // Log the state
+        console.log('Loading:', loading); // Log the loading state
+      }, [coursesArray, loading]); */
+
+    // Handle page change
+    const handlePageChange = (newPage) => {
+        setPage(newPage);
+    };
+
+
+    if (loading) return <div>Loading...</div>
+
+    return (
+        <div className='plview'>
+            <Navbar />
+            <div className='plv-container'>
+                <Sidebar />
+                <div className='plv-content'>
+                    <div className='plv-contain'>
+                        <p>Program List</p>
+                        <div className='user1'>
+
                             <div className='user2'>
-                                
+
                                 <div className='prgm-one'>
                                     <Link to="/addprogram">
                                         <div className='program-add'>
@@ -146,6 +172,21 @@ const Plview = () => {
                                 </Modal>
                             </div>
                         </div>
+                        <div className='pagination'>
+                            <button
+                                onClick={() => handlePageChange(currentPage - 1)}
+                                disabled={currentPage === 1}
+                            >
+                                Previous
+                            </button>
+                            <span>Page {currentPage}</span>
+                            <button
+                                onClick={() => handlePageChange(currentPage + 1)}
+                              /*  disabled={coursesArray.length < 50} */
+                            >
+                                Next
+                            </button>
+                        </div>
                         {/*table*/}
                         <div className='user-table'>
                             <TableContainer>
@@ -156,168 +197,57 @@ const Plview = () => {
                                             <Th>Faculty</Th>
                                             <Th>Program</Th>
                                             <Th>Subject Combination</Th>
-                                            <Th>Status</Th>
+                                            <Th>Action</Th>
                                         </Tr>
                                     </Thead>
                                     <Tbody>
-                                        <Tr>
-                                            <Td isNumeric fontSize="11.5px">
-                                                <div className='ola'>
-                                                    <img src={grply} alt='' />
-                                                    <p>1</p>
-                                                </div>
-                                            </Td>
-                                            <Td fontSize="11.5px">Faulty of Agriculture</Td>
-                                            <Td fontSize="11.5px">Department of soil science</Td>
-                                            <Td fontSize="11.5px">
-                                                <div className='suj-div'>
-                                                    <div className='suj-r'><p>Eng</p></div>
-                                                    <div className='suj-r'><p>Phy</p></div>
-                                                    <div className='suj-r'><p>Chm</p></div>
-                                                    <div className='suj-r'><p>Mth</p></div>
+                                        {Array.isArray(coursesArray) && coursesArray.map((course, i) => (
+                                            <Tr key={course.id}>
+                                                <Td isNumeric fontSize="11.5px">
+                                                    <div className='ola'>
+                                                        <img src={grply} alt='' />
+                                                        <p>{i + 1}</p>
+                                                    </div>
+                                                </Td>
+                                                <Td fontSize="11.5px">{course.faculty}</Td>
+                                                <Td fontSize="11.5px">{course.course}</Td>
+                                                <Td fontSize="11.5px">
+                                                    <div className='suj-div'>
+                                                        <div className='suj-r'><p>{course.subject_1}</p></div>
+                                                        <div className='suj-r'><p>{course.subject_2}</p></div>
+                                                        <div className='suj-r'><p>{course.subject_3}</p></div>
+                                                        <div className='suj-r'><p>{course.subject_4}</p></div>
                                                     </div>
                                                     <div className='suj2-div'>
-                                                    <div className='suj-r'><p>Civic</p></div>
-                                                    <div className='suj-r'><p>Comp</p></div>
-                                                    <div className='suj-r'><p>Yor</p></div>
-                                                    <div className='suj-r'><p>Bio</p></div>
-                                                </div>
-                                            </Td>
-                                            <Td fontSize="11.5px">
-                                                <div className='mini'>
-                                                    <p>Enable</p>
-                                                </div>
-                                            </Td>
-                                        </Tr>
-                                        <Tr>
-                                            <Td isNumeric fontSize="11.5px">
-                                                <div className='ola'>
-                                                    <img src={rplay} alt='' />
-                                                    <p>2</p>
-                                                </div>
-                                            </Td>
-                                            <Td fontSize="11.5px">Faulty of Agriculture</Td>
-                                            <Td fontSize="11.5px">Department of soil science</Td>
-                                            <Td fontSize="11.5px">
-                                                <div  className='suj-div'>
-                                                    <div className='suj-r'><p>Eng</p></div>
-                                                    <div className='suj-r'><p>Phy</p></div>
-                                                    <div className='suj-r'><p>Chm</p></div>
-                                                    <div className='suj-r'><p>Mth</p></div>
+                                                        <div className='suj-r'><p>{course.subject_5}</p></div>
+                                                        <div className='suj-r'><p>{course.subject_6}</p></div>
+                                                        <div className='suj-r'><p>{course.subject_7}</p></div>
+                                                        <div className='suj-r'><p>{course.subject_8}</p></div>
                                                     </div>
-                                                    <div className='suj2-div'>
-                                                    <div className='suj-r'><p>Civic</p></div>
-                                                    <div className='suj-r'><p>Comp</p></div>
-                                                    <div className='suj-r'><p>Yor</p></div>
-                                                    <div className='suj-r'><p>Bio</p></div>
-                                                </div>
-                                            </Td>
-                                            <Td fontSize="11.5px">
-                                                <div className='nimi'>
-                                                    <p>Disable</p>
-                                                </div>
-                                            </Td>
-                                        </Tr>
-                                        <Tr>
-                                            <Td isNumeric fontSize="11.5px">
-                                                <div className='ola'>
-                                                    <img src={grply} alt='' />
-                                                    <p>3</p>
-                                                </div>
-                                            </Td>
-                                            <Td fontSize="11.5px">Faulty of Agriculture</Td>
-                                            <Td fontSize="11.5px">Department of soil science</Td>
-                                            <Td fontSize="11.5px">
-                                                <div  className='suj-div'>
-                                                    <div className='suj-r'><p>Eng</p></div>
-                                                    <div className='suj-r'><p>Phy</p></div>
-                                                    <div className='suj-r'><p>Chm</p></div>
-                                                    <div className='suj-r'><p>Mth</p></div>
+                                                </Td>
+                                                <Td fontSize="11.5px">
+                                                    <div className='vf-action'>
+                                                        <div>
+                                                            <Link to='/'>
+                                                                <p>Edit</p>
+                                                            </Link>
+                                                        </div>
+                                                        <div>
+                                                            <p onClick={() => dispatch(deleteCourse(course))}>Delete</p>
+                                                        </div>
                                                     </div>
-                                                    <div className='suj2-div'>
-                                                    <div className='suj-r'><p>Civic</p></div>
-                                                    <div className='suj-r'><p>Comp</p></div>
-                                                    <div className='suj-r'><p>Yor</p></div>
-                                                    <div className='suj-r'><p>Bio</p></div>
-                                                </div>
-                                            </Td>
-                                            <Td fontSize="11.5px">
-                                                <div className='mini'>
-                                                    <p>Enable</p>
-                                                </div>
-                                            </Td>
-                                        </Tr>
+                                                </Td>
+                                            </Tr>
+                                        ))}
                                     </Tbody>
-                                    
                                 </Table>
                             </TableContainer>
                         </div>
-                        <div>
-                                        <Menu>
-                                            <MenuButton
-                                                aria-label='Options'
-                                                variant='outline'
-                                            >
-                                                <img src={menu} alt='' />
-                                            </MenuButton>
-                                            <MenuList>
-                                                <Link to="/updateprogram">
-                                                    <MenuItem >
-                                                        Update
-                                                    </MenuItem>
-                                                </Link>
-                                                <MenuItem onClick={openModal}>
-                                                    Disable
-                                                   </MenuItem>
-                                                    <Modal
-                                                        isOpen={modalIsOpen}
-                                                        onAfterOpen={afterOpenModal}
-                                                        onRequestClose={closeModal}
-                                                        style={customStyles}
-                                                        contentLabel="Disable Modal"
-                                                        ariaHideApp={true}
-                                                    >
-                                                        <h2 ref={(_subtitle) => (subtitle = _subtitle)}>.</h2>
-                                                        <img onClick={closeModal} src={close} alt='' className='usmg-img' />
-                                                        <div className='usmg-box'>
-                                                            <p className='usmg-p'>You are about to disable the following. <br />
-                                                                Kindly enter your password to proceed</p>
-                                                            <input type='text'
-                                                                className='usmg-input'
-                                                                required />
-                                                            <button className='usmg-butt'>Proceed</button>
-                                                        </div>
-                                                    </Modal>
-                                                <MenuItem onClick={openModal}>
-                                                    Delete
-                                                    </MenuItem>
-                                                    <Modal
-                                                        isOpen={modalIsOpen}
-                                                        onAfterOpen={afterOpenModal}
-                                                        onRequestClose={closeModal}
-                                                        style={customStyles}
-                                                        contentLabel="remove Modal"
-                                                        ariaHideApp={true}
-                                                    >
-                                                        <h2 ref={(_subtitle) => (subtitle = _subtitle)}>.</h2>
-                                                        <img onClick={closeModal} src={close} alt='' className='usmg-img' />
-                                                        <div className='usmg-box'>
-                                                            <p className='usmg-p'>You are about to remove the following. <br />
-                                                                Kindly enter your password to proceed</p>
-                                                            <input type='text'
-                                                                className='usmg-input'
-                                                                required />
-                                                            <button className='usmg-butt'>Proceed</button>
-                                                        </div>
-                                                    </Modal>
-                                            </MenuList>
-                                        </Menu>
-                                    </div>
-          </div>
-          </div>
-          </div>
+                    </div>
+                </div>
+            </div>
         </div>
-  )
+    )
 }
 
 export default Plview

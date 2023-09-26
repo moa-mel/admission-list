@@ -1,19 +1,17 @@
-import { createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from "axios";
 import {remote_url} from '../config' 
 
 
   
-export const getFaculty = createAsyncThunk(
-    'faculties/getFaculty',
-    async (faculty, { dispatch }) => {
+export const getSubject = createAsyncThunk(
+    'subjects/getSubject',
+    async (old_subject_code, new_subject_code, subject,) => {
       const token = '2|9kd74XHJPWoZD4qKichvW4OACl5q0puVobdikBNk69b85d99'; 
       localStorage.setItem('token_superAdmin', token);
 
-      const { old_subject_code, new_subject_code, subject } = faculty
-
       try {
-        const response = await axios.get(`${remote_url}/api/v1/superadmin/faculty/list?pagination=50`, {
+        const response = await axios.get(`${remote_url}/api/v1/superadmin/subject/list?pagination=50`, {
           params: {
             pagination: 50,
             old_subject_code,
@@ -51,49 +49,56 @@ export const getFaculty = createAsyncThunk(
   
   
 
-  export const addFaculty = createAsyncThunk(
-    'faculties/addFaculty',
-    async (faculty, { dispatch, rejectWithValue }) => {
+  export const addSubject = createAsyncThunk(
+    'subjects/addSubject',
+    async (subject, subject_code, { dispatch, rejectWithValue }) => {
       const token = '2|9kd74XHJPWoZD4qKichvW4OACl5q0puVobdikBNk69b85d99'; 
       localStorage.setItem('token_superAdmin', token);
+    
       const requestOptions = {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(faculty)
+        body: JSON.stringify(subject, subject_code)
       };
+      
       try {
-        const response = await fetch(`${remote_url}/api/v1/superadmin/faculty/add`, requestOptions);
+        const response = await fetch(`${remote_url}/api/v1/superadmin/subject/add`, requestOptions);
         
         if (!response.ok) {
           const errorMessage = `Error: ${response.status} ${response.statusText}`;
           console.error(errorMessage);
           return rejectWithValue(errorMessage);
         }
+        
         const data = await response.json();
+  
         // After successfully adding the faculty, dispatch getFaculty to update the faculties list in the state.
-        dispatch(getFaculty()); 
+        dispatch(getSubject());
+        
         return data;
+        
       } catch (error) {
         console.error('Error adding faculty:', error);
         return rejectWithValue(error.toString());
       }
     }
-  );  
-
-
-  export const updateFaculty = createAsyncThunk(
-    'faculties/updateFaculty',
-    async (faculty_id, faculty) => {
+  ); 
+  
+  
+  export const updateSubject = createAsyncThunk(
+    'subjects/updateSubject',
+    async (old_subject_code, new_subject_code, subject,) => {
       const token = '2|9kd74XHJPWoZD4qKichvW4OACl5q0puVobdikBNk69b85d99'; // Replace with the actual token
       localStorage.setItem('token_superAdmin', token);
       try {
-        const response = await axios.post(`${remote_url}/api/v1/superadmin/faculty/edit`, {
+        const response = await axios.post(`${remote_url}/api/v1/superadmin/subject/edit`, {
           params: {
-            faculty_id,
-            faculty,
+            old_subject_code,
+            new_subject_code,
+            subject,
           },
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -104,20 +109,20 @@ export const getFaculty = createAsyncThunk(
         const data = response.data;
         return data;
       } catch (error) {
-        console.error('Error editing faculty:', error);
+        console.error('Error editing subject:', error);
       }
      }
   )
 
-  export const deleteFaculty = createAsyncThunk(
-    'faculties/deleteFaculty',
-    async (id) => {
+  export const deleteSubject = createAsyncThunk(
+    'subjects/deleteSubject',
+    async (subject_code) => {
       const token = '2|9kd74XHJPWoZD4qKichvW4OACl5q0puVobdikBNk69b85d99'; // Replace with the actual token
       localStorage.setItem('token_superAdmin', token);
       try {
-        const response = await axios.delete(`${remote_url}/api/v1/superadmin/faculty/delete`, {
+        const response = await axios.delete(`${remote_url}/api/v1/superadmin/subject/delete`, {
           params: {
-            id,
+            subject_code,
           },
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -128,54 +133,54 @@ export const getFaculty = createAsyncThunk(
         const data = response.data;
         return data;
       } catch (error) {
-        console.error('Error deleting faculty:', error);
+        console.error('Error deleting subject:', error);
       }
      } 
   )
 
   const initialState = {
     loading:false,
-    faculties:[],
-    isFetchFacultyID:false,
-    faculty:{},
+    subjects:[],
+    isFetchSubjectID:false,
+    subject:{},
     currentPage: 1, 
   };
-  export const facultySlice = createSlice({
-    name: 'faculties',
+  export const subjectSlice = createSlice({
+    name: 'subjects',
     initialState,
     reducers: {},
     extraReducers: {
-        [getFaculty.pending]: (state) => {
+        [getSubject.pending]: (state) => {
             state.loading = true
           },
-          [getFaculty.fulfilled]: (state, { payload }) => {
+          [getSubject.fulfilled]: (state, { payload }) => {
             state.loading = false
-            state.faculties = payload.faculties.data
+            state.subjects = payload.subjects.data
             state.currentPage = payload.currentPage;
           },
-          [getFaculty.rejected]: (state) => {
+                    [getSubject.rejected]: (state) => {
             state.loading = false
           },
            
           //set post Product
-          [addFaculty.fulfilled]: (state, { payload }) => {
-            console.log('Payload from addFaculty:', payload);
-            state.faculties.push(payload);
+          [addSubject.fulfilled]: (state, { payload }) => {
+            console.log('Payload from addSubject:', payload);
+            state.subjects.push(payload);
           },
               
           //set update Product
-          [updateFaculty.fulfilled]:(state,{payload})=>{
-            const index = state.faculties.findIndex(faculty => faculty.id === payload.id);
-            state.faculties[index] = payload;
+          [updateSubject.fulfilled]:(state,{payload})=>{
+            const index = state.subjects.findIndex(subject => subject.id === payload.id);
+            state.subjects[index] = payload;
           },
      
            //set delete Product
-           [deleteFaculty.fulfilled]:(state,{payload})=>{
-            const index = state.faculties.findIndex(faculty => faculty.id === payload.id);
-            state.faculties.splice(index, 1);
+           [deleteSubject.fulfilled]:(state,{payload})=>{
+            const index = state.subjects.findIndex(subject => subject.id === payload.id);
+            state.subjects.splice(index, 1);
           }
     }
   })
 
 
-  export default facultySlice.reducer;
+  export default subjectSlice.reducer;

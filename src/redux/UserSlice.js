@@ -5,28 +5,31 @@ import { remote_url } from '../config'
 
 export const registerUser = createAsyncThunk(
     "user/registerUser",
-    async (newUser, thunkAPI) => {
-  const token = '2|9kd74XHJPWoZD4qKichvW4OACl5q0puVobdikBNk69b85d99'; // Replace with the actual token
-          localStorage.setItem('token_superAdmin', token);
-      try {
-        const config = {
-          headers: {
-  'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
+    async (newUser, thunkAPI, {dispatch}) => {
+        console.log("newUser:", newUser);
+        console.log("thunkAPI:", thunkAPI);
+        console.log("dispatch:", dispatch);
+        const token = '2|9kd74XHJPWoZD4qKichvW4OACl5q0puVobdikBNk69b85d99'; 
+        localStorage.setItem('token_superAdmin', token);
+        try {
+            const config = {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            }
+            const body = JSON.stringify(newUser);
+            const {data} = await axios.post(`${remote_url}/api/v1/superadmin/user/register`
+                , body, config);
+            console.log( 'new user response',data);
+            dispatch(getUser()); 
+            return data ;
+        } catch (error) {
+            console.error(error.response.data);
+            return thunkAPI.rejectWithValue(error.response.data);
         }
-        const body = JSON.stringify(newUser);
-        const { data } = await axios.post(`${remote_url}/api/v1/superadmin/user/register`
-  , body, config);
-        console.log(data);
-        const { title, email, first_name, last_name, middle_name, phone_1, phone_2, account_type } = newUser;
-        return data;
-      } catch (error) {
-        console.error(error.response.data);
-        return thunkAPI.rejectWithValue(error.response.data);
-      }
     },
-  );
+);
 
 
 export const loginUser = createAsyncThunk(
@@ -59,7 +62,9 @@ export const getUser = createAsyncThunk(
                 },
             });
             // Assuming the response contains the data you need
+         console.log('not getting users', response)
             const data = response.data;
+            console.log('olaitan user data')
             return data;
         } catch (error) {
             // Log the detailed error information
@@ -76,6 +81,96 @@ export const getUser = createAsyncThunk(
         }
     }
 )
+
+export const deleteUser = createAsyncThunk(
+    'user/deleteuser',
+    async (email, password) => {
+        const token = '2|9kd74XHJPWoZD4qKichvW4OACl5q0puVobdikBNk69b85d99'; // Replace with the actual token
+        localStorage.setItem('token_superAdmin', token);
+        try {
+            const response = await axios.delete(`${remote_url}/api/v1/superadmin/faculty/delete`, {
+                params: {
+                    email,
+                    password,
+                },
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+            // Assuming the response contains the data you need
+            const data = response.data;
+            return data;
+        } catch (error) {
+            console.error('Error deleting user:', error);
+        }
+    }
+)
+
+export const addEnable = createAsyncThunk(
+    'user/addEnable',
+    async (user, { dispatch, rejectWithValue }) => {
+      const token = '2|9kd74XHJPWoZD4qKichvW4OACl5q0puVobdikBNk69b85d99'; 
+      localStorage.setItem('token_superAdmin', token);
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+      };
+      try {
+        const response = await fetch(`${remote_url}/api/v1/superadmin/user/enable`, requestOptions);
+        
+        if (!response.ok) {
+          const errorMessage = `Error: ${response.status} ${response.statusText}`;
+          console.error(errorMessage);
+          return rejectWithValue(errorMessage);
+        }
+        const data = await response.json();
+        // After successfully adding the faculty, dispatch getFaculty to update the faculties list in the state.
+        dispatch(getUser()); 
+        return data;
+      } catch (error) {
+        console.error('Error enabling user:', error);
+        return rejectWithValue(error.toString());
+      }
+    }
+  );
+
+  export const addDisable = createAsyncThunk(
+    'user/addDisable',
+    async (user, { dispatch, rejectWithValue }) => {
+      const token = '2|9kd74XHJPWoZD4qKichvW4OACl5q0puVobdikBNk69b85d99'; 
+      localStorage.setItem('token_superAdmin', token);
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+      };
+      try {
+        const response = await fetch(`${remote_url}/api/v1/superadmin/user/disable`, requestOptions);
+        
+        if (!response.ok) {
+          const errorMessage = `Error: ${response.status} ${response.statusText}`;
+          console.error(errorMessage);
+          return rejectWithValue(errorMessage);
+        }
+        const data = await response.json();
+        // After successfully adding the faculty, dispatch getFaculty to update the faculties list in the state.
+        dispatch(getUser()); 
+        return data;
+      } catch (error) {
+        console.error('Error disabling user:', error);
+        return rejectWithValue(error.toString());
+      }
+    }
+  );
+
 
 
 const userSlice = createSlice({
@@ -102,15 +197,16 @@ const userSlice = createSlice({
                 state.user = action.payload;
                 state.error = null;
             })
-            .addCase(registerUser.rejected, (state, action) => {
+            .addCase(registerUser.rejected, (state) => {
                 state.loading = true;
-                state.user = null;
-                console.log(action.error);
+                // state.user = null;
+                // console.log("register rejected errdj", action)
+                /*console.log(action.error);
                 if (action.error.message === "Request failed with status code 401") {
                     state.error = `Access Denied Invalid Credentials`;
                 } else {
                     state.error = action.error.message;
-                }
+                }*/
             })
             .addCase(loginUser.pending, (state) => {
                 state.loading = true;
@@ -125,26 +221,39 @@ const userSlice = createSlice({
             .addCase(loginUser.rejected, (state, action) => {
                 state.loading = true;
                 state.user = null;
-                console.log(action.error.message);
+                console.log('login rejected err', action)
+               /* console.log(action.error.message);
                 if (action.error.message === "Request failed with status code 401") {
                     state.error = `Access Denied Invalid Credentials`;
                 } else {
                     state.error = action.error.message;
-                }
+                } */
             })
             .addCase(getUser.pending, (state) => {
                 state.loading = true
             })
             .addCase(getUser.fulfilled, (state, action) => {
                 state.loading = false
-                if (action.payload.user) {
-                    state.user = action.payload.user.data;
+                if (action.payload.users) {
+                    state.user = action.payload.users.data;
                 }
                 state.pagination = action.payload.pagination;
                 state.status = action.payload.status;
             })
             .addCase(getUser.rejected, (state) => {
                 state.loading = false
+            })
+            .addCase(deleteUser.fulfilled, (state,{payload})=>{
+                const index = state.catchments.findIndex(catchment => catchment.id === payload.id);
+                state.catchments.splice(index, 1);
+            })
+            .addCase(addEnable.fulfilled, (state,{payload})=>{
+                const index = state.catchments.findIndex(catchment => catchment.id === payload.id);
+                state.catchments.splice(index, 1);
+            })
+            .addCase(addDisable.fulfilled, (state,{payload})=>{
+                const index = state.catchments.findIndex(catchment => catchment.id === payload.id);
+                state.catchments.splice(index, 1);
             })
     }
 });

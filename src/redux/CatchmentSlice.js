@@ -4,35 +4,26 @@ import {remote_url} from '../config'
 
 
   
-export const getFaculty = createAsyncThunk(
-    'faculties/getFaculty',
-    async (faculty, { dispatch }) => {
+export const getCatchment = createAsyncThunk(
+    'catchments/getCatchment',
+    async () => {
       const token = '2|9kd74XHJPWoZD4qKichvW4OACl5q0puVobdikBNk69b85d99'; 
       localStorage.setItem('token_superAdmin', token);
 
-      const { old_subject_code, new_subject_code, subject } = faculty
-
       try {
-        const response = await axios.get(`${remote_url}/api/v1/superadmin/faculty/list?pagination=50`, {
-          params: {
-            pagination: 50,
-            old_subject_code,
-            new_subject_code,
-            subject,
-          },
+        const response = await axios.get(`${remote_url}/api/v1/superadmin/catchment/list`, {
+          
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
         });
-        
-              
         // Assuming the response contains the data you need
         const data = response.data;
         return data;
       } catch (error) {
         // Log the detailed error information
-        console.error('Error fetching faculty:', error);
+        console.error('Error fetching catchment:', error);
         console.error('Error message:', error.message);
         console.error('Error stack:', error.stack);
         
@@ -51,49 +42,55 @@ export const getFaculty = createAsyncThunk(
   
   
 
-  export const addFaculty = createAsyncThunk(
-    'faculties/addFaculty',
-    async (faculty, { dispatch, rejectWithValue }) => {
+  export const addCatchment = createAsyncThunk(
+    'catchments/addCatchment',
+    async (state, { dispatch, rejectWithValue }) => {
       const token = '2|9kd74XHJPWoZD4qKichvW4OACl5q0puVobdikBNk69b85d99'; 
       localStorage.setItem('token_superAdmin', token);
+    
       const requestOptions = {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(faculty)
+        body: JSON.stringify(state)
       };
+      
       try {
-        const response = await fetch(`${remote_url}/api/v1/superadmin/faculty/add`, requestOptions);
+        const response = await fetch(`${remote_url}/api/v1/superadmin/catchment/add`, requestOptions);
         
         if (!response.ok) {
           const errorMessage = `Error: ${response.status} ${response.statusText}`;
           console.error(errorMessage);
           return rejectWithValue(errorMessage);
         }
+        
         const data = await response.json();
+  
         // After successfully adding the faculty, dispatch getFaculty to update the faculties list in the state.
-        dispatch(getFaculty()); 
+        dispatch(getCatchment());
+        
         return data;
+        
       } catch (error) {
-        console.error('Error adding faculty:', error);
+        console.error('Error adding catchment:', error);
         return rejectWithValue(error.toString());
       }
     }
   );  
 
 
-  export const updateFaculty = createAsyncThunk(
-    'faculties/updateFaculty',
-    async (faculty_id, faculty) => {
+  export const updateCatchment = createAsyncThunk(
+    'catchments/updateCatchment',
+    async (catchment_id, state) => {
       const token = '2|9kd74XHJPWoZD4qKichvW4OACl5q0puVobdikBNk69b85d99'; // Replace with the actual token
       localStorage.setItem('token_superAdmin', token);
       try {
-        const response = await axios.post(`${remote_url}/api/v1/superadmin/faculty/edit`, {
+        const response = await axios.post(`${remote_url}/api/v1/superadmin/catchment/edit`, {
           params: {
-            faculty_id,
-            faculty,
+            catchment_id,
+            state,
           },
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -104,21 +101,19 @@ export const getFaculty = createAsyncThunk(
         const data = response.data;
         return data;
       } catch (error) {
-        console.error('Error editing faculty:', error);
+        console.error('Error editing catchment:', error);
       }
      }
   )
 
-  export const deleteFaculty = createAsyncThunk(
-    'faculties/deleteFaculty',
-    async (id) => {
+  export const deleteCatchment = createAsyncThunk(
+    'catchments/deleteCatchment',
+    async () => {
       const token = '2|9kd74XHJPWoZD4qKichvW4OACl5q0puVobdikBNk69b85d99'; // Replace with the actual token
       localStorage.setItem('token_superAdmin', token);
       try {
-        const response = await axios.delete(`${remote_url}/api/v1/superadmin/faculty/delete`, {
-          params: {
-            id,
-          },
+        const response = await axios.delete(`${remote_url}/api/v1/superadmin/catchment/delete`, {
+          
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
@@ -128,54 +123,54 @@ export const getFaculty = createAsyncThunk(
         const data = response.data;
         return data;
       } catch (error) {
-        console.error('Error deleting faculty:', error);
+        console.error('Error deleting catchment:', error);
       }
      } 
   )
 
   const initialState = {
     loading:false,
-    faculties:[],
-    isFetchFacultyID:false,
-    faculty:{},
+    catchments:[],
+    isFetchCatchmentID:false,
+    catchment:{},
     currentPage: 1, 
   };
-  export const facultySlice = createSlice({
-    name: 'faculties',
+  export const catchmentSlice = createSlice({
+    name: 'catchments',
     initialState,
     reducers: {},
     extraReducers: {
-        [getFaculty.pending]: (state) => {
+        [getCatchment.pending]: (state) => {
             state.loading = true
           },
-          [getFaculty.fulfilled]: (state, { payload }) => {
+          [getCatchment.fulfilled]: (state, { payload }) => {
             state.loading = false
-            state.faculties = payload.faculties.data
+            state.catchments = payload.catchments.data
             state.currentPage = payload.currentPage;
           },
-          [getFaculty.rejected]: (state) => {
+                    [getCatchment.rejected]: (state) => {
             state.loading = false
           },
            
           //set post Product
-          [addFaculty.fulfilled]: (state, { payload }) => {
-            console.log('Payload from addFaculty:', payload);
-            state.faculties.push(payload);
+          [addCatchment.fulfilled]: (state, { payload }) => {
+            console.log('Payload from addCatchment:', payload);
+            state.catchments.push(payload);
           },
               
           //set update Product
-          [updateFaculty.fulfilled]:(state,{payload})=>{
-            const index = state.faculties.findIndex(faculty => faculty.id === payload.id);
-            state.faculties[index] = payload;
+          [updateCatchment.fulfilled]:(state,{payload})=>{
+            const index = state.catchments.findIndex(catchment => catchment.id === payload.id);
+            state.catchment[index] = payload;
           },
      
            //set delete Product
-           [deleteFaculty.fulfilled]:(state,{payload})=>{
-            const index = state.faculties.findIndex(faculty => faculty.id === payload.id);
-            state.faculties.splice(index, 1);
+           [deleteCatchment.fulfilled]:(state,{payload})=>{
+            const index = state.catchments.findIndex(catchment => catchment.id === payload.id);
+            state.catchments.splice(index, 1);
           }
     }
   })
 
 
-  export default facultySlice.reducer;
+  export default catchmentSlice.reducer;

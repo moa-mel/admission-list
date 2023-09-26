@@ -32,12 +32,11 @@ const Navbar = () => {
                 <p className='nav-p'>Obafemi Awolowo University<br />
                             Admission portal</p>
             </div>
-            {Array.isArray(userArray) && userArray.map((user, i) => (
-            <div className='nav-right' key={i}>
-                <p className='nr-p'>Welcome {user.user.first_name},</p>
+           
+            <div className='nav-right' >
+                <p className='nr-p'>Welcome </p>
                 <p className='nr-p1' >Sign Out</p>
             </div>
-             ))}
             </div>
         </div>
     </div>

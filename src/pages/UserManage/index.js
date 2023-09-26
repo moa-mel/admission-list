@@ -4,8 +4,6 @@ import Navbar from '../../components/Navbar'
 import Sidebar from '../../components/Sidebar'
 import stream from "../../images/streamline_interface-add-circle-button-remove-cross-add-buttons-plus-circle.png"
 import excel from "../../images/Vector(1).png"
-import rplay from "../../images/Vector(2).png"
-import grply from "../../images/Vector(3).png"
 import delet from "../../images/Vector(4).png"
 import menu from "../../images/Vector(1) 2.png"
 import close from "../../images/ic_baseline-cancel.png"
@@ -20,7 +18,6 @@ import {
     Table,
     Thead,
     Tbody,
-    Tfoot,
     Tr,
     Th,
     Td,
@@ -58,7 +55,7 @@ const UserManage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [filterStatus, setFilterStatus] = useState("enabled"); // Renamed this variable
     // Select user data from the Redux store
-    const newUser = useSelector((state) => state.user.newUser);
+    const newUser = useSelector((state) => state.user.user);
     const pagination = useSelector((state) => state.user.pagination);
     const status = useSelector((state) => state.user.status);
 
@@ -213,7 +210,7 @@ const UserManage = () => {
                             </div>
                         </div>
                         )}
-                        
+
                         {/*table*/}
                         <div className='user-table'>
                             <TableContainer>
