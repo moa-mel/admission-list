@@ -8,19 +8,7 @@ import { getUser } from '../../redux/UserSlice';
 
 const Navbar = () => {
  
-  const dispatch = useDispatch();
-    const { user: userArray, loading } = useSelector(state => state.user);
-    let fetchMount = true;
-
-    useEffect(() => {
-        if(fetchMount){
-            dispatch(getUser())
-            console.log('Dispatched getUser');
-        }
-        return ()=>{
-            fetchMount = false;
-        }
-    }, [])
+  
 
 
   return (

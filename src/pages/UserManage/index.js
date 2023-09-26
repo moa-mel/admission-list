@@ -32,7 +32,7 @@ import {
 } from '@chakra-ui/react'
 import Modal from 'react-modal';
 import { useSelector, useDispatch } from 'react-redux';
-import { getUser } from '../../redux/UserSlice'
+import { getUser, deleteUser } from '../../redux/UserSlice'
 
 
 const customStyles = {
@@ -55,10 +55,12 @@ const UserManage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [filterStatus, setFilterStatus] = useState("enabled"); // Renamed this variable
     // Select user data from the Redux store
-    const newUser = useSelector((state) => state.user.user);
-    const pagination = useSelector((state) => state.user.pagination);
-    const status = useSelector((state) => state.user.status);
-
+    const users = useSelector((state) => state.users.user);
+    console.log('Users:', users);
+    const pagination = useSelector((state) => state.users.pagination);
+    console.log('Pagiantion:', pagination)
+    const status = useSelector((state) => state.users.status);
+    console.log('Status:', status)
 
     function openModal() {
         setIsOpen(true);
@@ -192,7 +194,7 @@ const UserManage = () => {
                                 {/* Add more status options if needed */}
                             </select>
                         </div>
-
+                        
                         {/* Pagination */}
                         {pagination && (
                         <div className="pagination">
@@ -209,7 +211,7 @@ const UserManage = () => {
                                 </button>
                             </div>
                         </div>
-                        )}
+                        )} 
 
                         {/*table*/}
                         <div className='user-table'>
@@ -226,10 +228,11 @@ const UserManage = () => {
                                             <Th>Phone Number 2</Th>
                                             <Th>E-mail</Th>
                                             <Th>setAccount type</Th>
+                                            <Th>Action</Th>
                                         </Tr>
                                     </Thead>
                                     <Tbody>
-                                        {newUser.map((user, i) => (
+                                       {users && users.map((user, i) => (
                                             <Tr key={user.id}>
                                                 <Td isNumeric fontSize="11.5px">
                                                     {i+1}
@@ -242,72 +245,25 @@ const UserManage = () => {
                                                 <Td fontSize="11.5px">{user.phone_2}</Td>
                                                 <Td fontSize="11.5px">{user.email}</Td>
                                                 <Td fontSize="11.5px">{user.account_type}</Td>
+                                                <Td>
+                                            <div className='vf-action'>
+                                                <div>
+                                                    <Link to='/'>
+                                                        <p>Edit</p>
+                                                    </Link>
+                                                </div>
+                                                <div>
+                                                    <p onClick={() => dispatch(deleteUser(users))}>Delete</p>
+                                                </div>
+                                            </div>
+                                        </Td>
                                             </Tr>
-                                        ))}
+                                           
+                                       ))} 
                                     </Tbody>
                                 </Table>
                             </TableContainer>
-                            <div>
-                                <Menu>
-                                    <MenuButton
-                                        aria-label='Options'
-                                        variant='outline'
-                                    >
-                                        <img src={menu} alt='' />
-                                    </MenuButton>
-                                    <MenuList>
-                                        <Link to="/updateuser">
-                                            <MenuItem >
-                                                Update
-                                            </MenuItem>
-                                        </Link>
-                                        <MenuItem onClick={openModal}>
-                                            Disable
-                                        </MenuItem>
-                                        <Modal
-                                            isOpen={modalIsOpen}
-                                            onAfterOpen={afterOpenModal}
-                                            onRequestClose={closeModal}
-                                            style={customStyles}
-                                            contentLabel="Disable Modal"
-                                            ariaHideApp={true}
-                                        >
-                                            <h2 ref={(_subtitle) => (subtitle = _subtitle)}>.</h2>
-                                            <img onClick={closeModal} src={close} alt='' className='usmg-img' />
-                                            <div className='usmg-box'>
-                                                <p className='usmg-p'>You are about to disable the following. <br />
-                                                    Kindly enter your password to proceed</p>
-                                                <input type='text'
-                                                    className='usmg-input'
-                                                    required />
-                                                <button className='usmg-butt'>Proceed</button>
-                                            </div>
-                                        </Modal>
-                                        <MenuItem onClick={openModal}>
-                                            Delete
-                                        </MenuItem>
-                                        <Modal
-                                            isOpen={modalIsOpen}
-                                            onAfterOpen={afterOpenModal}
-                                            onRequestClose={closeModal}
-                                            style={customStyles}
-                                            contentLabel="remove Modal"
-                                            ariaHideApp={true}
-                                        >
-                                            <h2 ref={(_subtitle) => (subtitle = _subtitle)}>.</h2>
-                                            <img onClick={closeModal} src={close} alt='' className='usmg-img' />
-                                            <div className='usmg-box'>
-                                                <p className='usmg-p'>You are about to remove the following. <br />
-                                                    Kindly enter your password to proceed</p>
-                                                <input type='text'
-                                                    className='usmg-input'
-                                                    required />
-                                                <button className='usmg-butt'>Proceed</button>
-                                            </div>
-                                        </Modal>
-                                    </MenuList>
-                                </Menu>
-                            </div>
+                           
                         </div>
                     </div>
                 </div>

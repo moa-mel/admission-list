@@ -12,7 +12,7 @@ import admissionReducer from "./redux/AdmissionSlice";
 
 const store = configureStore({
     reducer:{
-        user: userReducer,
+        users: userReducer,
         courses: courseReducer,
         faculties: facultyReducer,
         catchments: catchmentReducer,

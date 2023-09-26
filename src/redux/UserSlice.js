@@ -5,8 +5,8 @@ import { remote_url } from '../config'
 
 export const registerUser = createAsyncThunk(
     "user/registerUser",
-    async (newUser, thunkAPI, {dispatch}) => {
-        console.log("newUser:", newUser);
+    async (user, thunkAPI, {dispatch}) => {
+        console.log("newUser:", user);
         console.log("thunkAPI:", thunkAPI);
         console.log("dispatch:", dispatch);
         const token = '2|9kd74XHJPWoZD4qKichvW4OACl5q0puVobdikBNk69b85d99'; 
@@ -18,12 +18,13 @@ export const registerUser = createAsyncThunk(
                     'Content-Type': 'application/json'
                 }
             }
-            const body = JSON.stringify(newUser);
+            const body = JSON.stringify(user);
             const {data} = await axios.post(`${remote_url}/api/v1/superadmin/user/register`
                 , body, config);
             console.log( 'new user response',data);
+            const { title, email, first_name, last_name, middle_name, phone_1, phone_2, account_type } = user;
             dispatch(getUser()); 
-            return data ;
+            return { data, pagination: data.pagination } ;
         } catch (error) {
             console.error(error.response.data);
             return thunkAPI.rejectWithValue(error.response.data);
@@ -63,12 +64,12 @@ export const getUser = createAsyncThunk(
             });
             // Assuming the response contains the data you need
          console.log('not getting users', response)
-            const data = response.data;
+            const data = response.data.users.data;
             console.log('olaitan user data')
             return data;
         } catch (error) {
             // Log the detailed error information
-            console.error('Error fetching faculty:', error);
+            console.error('Error fetching users:', error);
             console.error('Error message:', error.message);
             console.error('Error stack:', error.stack);
             // If the error object has a response property, it means the server has responded with an error status code.
@@ -107,8 +108,8 @@ export const deleteUser = createAsyncThunk(
     }
 )
 
-export const addEnable = createAsyncThunk(
-    'user/addEnable',
+export const enableUser = createAsyncThunk(
+    'user/enableUser',
     async (user, { dispatch, rejectWithValue }) => {
       const token = '2|9kd74XHJPWoZD4qKichvW4OACl5q0puVobdikBNk69b85d99'; 
       localStorage.setItem('token_superAdmin', token);
@@ -139,8 +140,8 @@ export const addEnable = createAsyncThunk(
     }
   );
 
-  export const addDisable = createAsyncThunk(
-    'user/addDisable',
+  export const disableUser = createAsyncThunk(
+    'user/disableUser',
     async (user, { dispatch, rejectWithValue }) => {
       const token = '2|9kd74XHJPWoZD4qKichvW4OACl5q0puVobdikBNk69b85d99'; 
       localStorage.setItem('token_superAdmin', token);
@@ -182,7 +183,7 @@ const userSlice = createSlice({
         pagination: {
             total_pages: 1,
         },
-        newUser: []
+       /* newUser: [] */
     },
 
     extraReducers: (builder) => {
@@ -234,8 +235,11 @@ const userSlice = createSlice({
             })
             .addCase(getUser.fulfilled, (state, action) => {
                 state.loading = false
-                if (action.payload.users) {
-                    state.user = action.payload.users.data;
+                if (action.payload.users && Array.isArray(action.payload.users.data)) {
+                    state.user = action.payload.users.data; // Assuming this is an array
+                } else {
+                    console.error("Data is not an array:", action.payload.users.data);
+                    // Handle the case where data is not an array
                 }
                 state.pagination = action.payload.pagination;
                 state.status = action.payload.status;
@@ -243,17 +247,17 @@ const userSlice = createSlice({
             .addCase(getUser.rejected, (state) => {
                 state.loading = false
             })
-            .addCase(deleteUser.fulfilled, (state,{payload})=>{
-                const index = state.catchments.findIndex(catchment => catchment.id === payload.id);
-                state.catchments.splice(index, 1);
+            .addCase(deleteUser.fulfilled, (state,payload)=>{
+                const index = state.user.findIndex(user => user.id === payload.id);
+                state.user.splice(index, 1);
             })
-            .addCase(addEnable.fulfilled, (state,{payload})=>{
-                const index = state.catchments.findIndex(catchment => catchment.id === payload.id);
-                state.catchments.splice(index, 1);
+            .addCase(enableUser.fulfilled, (state,{payload})=>{
+                const index = state.user.findIndex(user => user.id === payload.id);
+                state.user.splice(index, 1);
             })
-            .addCase(addDisable.fulfilled, (state,{payload})=>{
-                const index = state.catchments.findIndex(catchment => catchment.id === payload.id);
-                state.catchments.splice(index, 1);
+            .addCase(disableUser.fulfilled, (state,{payload})=>{
+                const index = state.user.findIndex(user => user.id === payload.id);
+                state.user.splice(index, 1);
             })
     }
 });
